@@ -5,8 +5,8 @@ class Producto(models.Model):
     Precio=models.IntegerField()
     descripcion=models.CharField( max_length=250)
     cantidad= models.IntegerField()
-    estado_producto = models.BooleanField()
-    
+    estado_producto = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='media/db-img/', default='media/db-img/default.jpg')
     
 class Accesorios(models.Model):
     producto_id=models.ForeignKey(Producto,on_delete=models.CASCADE)
@@ -32,7 +32,7 @@ class Usuario(models.Model):
     email=models.CharField(max_length=150)
     nr_telefono=models.CharField(max_length=15)
     contraseña= models.CharField(max_length=50)
-    estado_usuario=models.BooleanField()
+    estado_usuario=models.BooleanField(default=True)
         
 class Venta(models.Model):
     venta_id=models.IntegerField(primary_key=True)
