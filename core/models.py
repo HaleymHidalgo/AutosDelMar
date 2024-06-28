@@ -2,7 +2,7 @@ from django.db import models
 
 class Producto(models.Model):
     producto_id = models.IntegerField(primary_key=True)
-    Precio=models.IntegerField()
+    precio=models.IntegerField()
     descripcion=models.CharField( max_length=250)
     cantidad= models.IntegerField()
     estado_producto = models.BooleanField(default=True)
@@ -14,6 +14,7 @@ class Accesorios(models.Model):
     distribuidor=models.CharField(max_length=100)
     
 class Vehiculo(models.Model):
+    #No es un campo de texto, es un Objecto Producto
     producto_id=models.ForeignKey(Producto,on_delete=models.CASCADE)
     marca=models.CharField(max_length=100)
     modelo=models.CharField(max_length=100)

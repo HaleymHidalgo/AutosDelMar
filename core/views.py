@@ -14,3 +14,11 @@ def home(request):
 
 def carrito(request):
     return render(request, 'carrito.html')
+
+def paginaProducto(request, id):
+    #Aqui nosotros obtenemos el producto que queremos mostrar
+    vehiculo = models.Vehiculo.objects.get(producto_id=id)
+    context = {
+        'vehiculo': vehiculo,
+    }
+    return render(request, 'paginaProducto.html', context)
