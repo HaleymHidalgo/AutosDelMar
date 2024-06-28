@@ -18,6 +18,12 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
 
 Primero, abre una terminal o cmd (windows).
 
+* Instalar virtualenv (Manejador de 'Virtual Environments')
+
+```bash
+pip install virtualenv
+```
+
 * clona el repositorio del proyecto desde GitHub.
 
 ```bash
