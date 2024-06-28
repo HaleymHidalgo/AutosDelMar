@@ -21,7 +21,7 @@ class Vehiculo(models.Model):
 
 
 class Tipo_usuario(models.Model):
-    id_tipo_usuario=models.IntegerField(Primary_kay=True)
+    id_tipo_usuario=models.IntegerField(primary_key=True)
     nombre_tipo_usuario=models.CharField(max_length=50)
     
 class Usuario(models.Model):
@@ -38,7 +38,7 @@ class Venta(models.Model):
     venta_id=models.IntegerField(primary_key=True)
     fecha_venta=models.DateField()
     total_venta=models.IntegerField()
-    cliente_run=models.models.ForeignKey( Usuario,on_delete=models.CASCADE)
+    cliente_run=models.ForeignKey( Usuario,on_delete=models.CASCADE)
     
 
 class Venta_Producto(models.Model):
