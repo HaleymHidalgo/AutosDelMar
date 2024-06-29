@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="flex-column-center fondo-formulario mt-5">
+        <img src="{% static '/assets/img/isotipo-autos-del-mar.png' %}" alt="">
+        <div class="container">
+            <form class="form" method="POST" action="{% url 'registroUsuario' %}">
+                {% csrf_token %}
+                {{ form }}
+                <p style="color: red;">{{ error }}</p>
+                <button>Confirmar</button>
+            </form>
+        </div>
+            
+        
+    </div>
+</section>
+
+{% endblock %}
