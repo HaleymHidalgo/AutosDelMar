@@ -3,7 +3,9 @@ from . import models, forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+import ssl
+import smtplib
+from email.message import EmailMessage
 # Create your views here.
 def home(request):
     if request.method == 'GET':
@@ -25,6 +27,7 @@ def paginaProducto(request, id):
     vehiculo = models.Vehiculo.objects.get(producto_id=id)
     context = {
         'vehiculo': vehiculo,
+        'formulario': forms.formularioContacto
     }
     return render(request, 'paginaProducto.html', context)
 
@@ -79,9 +82,95 @@ def acceso_usuario(request):
             })
     else:
         return render(request, 'acceso/acceso.html', {'form': forms.accesoUsuario})
+#funcion enviar correo
+def enviarCorreo(contacto):
+    print ("esta wea esta funcionando")
+    Email = 'autosdelmar.project@gmail.com'
+    #no es la contrase;a del correo te lo proporciona google mediante este link myaccount.google.com/u/1/apppasswords
+    contraseña = 'ynms qvch shzj yfhd'
+    To = contacto.correo
+    print (contacto.correo)
+    Subject = 'Cita confirmada'
+    Body = """
+    Su cita a sido confirmada lo llamaremos para mas informacion.
+    """
 
+    # Crear objeto de mail
+    em = EmailMessage()
+    em['From'] = Email
+    em['To'] = To
+    em['Subject'] = Subject
+    em.set_content(Body)
+
+    # Añadir SSL (extra de seguridad)
+    context = ssl.create_default_context()
+
+    # Iniciar sesión y enviar el mail
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(Email, contraseña)
+        smtp.sendmail(Email, To, em.as_string())
+
+def formularioContacto (request):
+    if request.method == 'POST':
+        form = forms.formularioContacto(request.POST)
+        contacto = models.Contacto.objects.create(
+            nombre = request.POST['nombre'],
+            apellido = request.POST['apellido'],
+            telefono = request.POST['telefono'],
+            correo = request.POST['correo']
+        )
+        try:
+            contacto.save()
+            enviarCorreo(contacto)
+            return redirect('home')
+            
+                
+        except:
+            return render(request, 'paginaProducto.html', {'form': forms.formularioContacto, 'error': 'Datos invalidos'})  
+        
+    else:
+        return render(request, 'paginaProducto.html', {'form': forms.formularioContacto})
+
+#vendedor
+def v_home(request):
+    if request.method == 'GET':
+        #Aqui nosotros obtenemos todos los productos que estan en la base de datos
+        vehiculos = models.Vehiculo.objects.all()
+        context = {'vehiculos': vehiculos}
+        #le vamos a pasarle el contexto a la plantilla
+        return render(request, 'vendedor/home.html', context)
+    
+def v_registroProducto(request):
+    if request.method == 'POST':
+        form = forms.registroVehiculo(request.POST)
+        
+        producto = models.Producto.objects.create(
+            precio = request.POST['precio'],
+            descripcion = request.POST['descripcion'],
+            cantidad = request.POST['cantidad'],
+            image = request.FILES['image']
+        )
+        vehiculo = models.Vehiculo.objects.create(
+            producto_id = producto,
+            marca = request.POST['marca'],
+            modelos = request.POST['modelos'],
+            carroceria = request.POST['carroceria'],
+            anio = request.POST['anio'],
+            combustible = request.POST['combustible'],
+            transmision = request.POST ['transmision']    
+        )
+        try:
+            producto.save()
+            vehiculo.save()
+            return redirect('v_home')
+        except Exception as e:
+            print(f'Error al crear producto: {e}')
+            return render(request, 'vendedor/registroProducto.html', {'form': form, 'error': 'Error al crear el producto'})
+    return render(request, 'vendedor/registroProducto.html', {'form': forms.registroVehiculo})
 
 #Funcion para deslogear al usuario
 def cerrar_sesion(request):
     logout(request)
     return redirect('home')
+
+#funcion enviar correo

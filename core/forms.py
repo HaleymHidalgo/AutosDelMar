@@ -17,6 +17,25 @@ class registroUsuario(UserCreationForm):
             'password2': 'Confirmar contraseña'
         }
 
+class formularioContacto(forms.Form):
+    nombre = forms.CharField(label="Ingrese su nombre", max_length=50)
+    apellido = forms.CharField(label="ingrese su apellido", max_length=50)
+    telefono = forms.CharField(label="Ingrese su Telefono", max_length=50)
+    correo = forms.EmailField(label="Ingrese su correo", max_length=50)
+
 class accesoUsuario(forms.Form):
     usuario_id = forms.CharField(label="RUT (sin puntos)", max_length=10)
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
+
+class registroVehiculo(forms.Form):
+    marca = forms.CharField(label= "la marca del vehiculo",max_length=30)
+    modelo = forms.CharField(label= "el modelo del vehiculo",max_length=30)
+    carroceria = forms.CharField(label= "la carroceria del vehiculo",max_length=30)
+    combustible = forms.CharField(label= "el combustible del vehiculo",max_length=30)
+    anio = forms.IntegerField(label= "el año del vehiculo")
+    transmision = forms.CharField(label= "la transmisión del vehiculo",max_length=30)
+    precio = forms.IntegerField(label= "el precio del vehiculo")
+    cantidad = forms.IntegerField(label="cantidad de vehiculo")
+    descripcion = forms.CharField(label="descripcion", max_length=250)
+    image = forms.ImageField()
+    

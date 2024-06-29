@@ -86,10 +86,29 @@
         </table>
     </div>
 
-    <div id="productos">
-        <div class="flex-column-center">
-            <button id="btnAdd" class="btn btn-info">Agregar al carrito</button>
+    <section>
+        <div class="flex-column-center fondo-formulario mt-5">
+            <div class="container">
+                <form class="form" method="POST" action="{% url 'formularioContacto' %}">
+                    {% csrf_token %}
+    
+                    {% for field in formulario%}
+                    <div class="form-control">
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    
+                    <p style="color: red;">{{ error }}</p>
+                    
+                    <div id="productos">
+                        <div class="flex-column-center">
+                            <button id="btnAdd" class="btn btn-info">Contactanos</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    </section>
 </section>
 {% endblock %}

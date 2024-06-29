@@ -36,3 +36,9 @@ class Venta_Producto(models.Model):
     producto_id=models.ForeignKey(Venta,on_delete=models.CASCADE)
     cantidad_producto=models.IntegerField()
     subtotal_producto= models.IntegerField()
+
+class Contacto (models.Model):
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    telefono = models.CharField(max_length=50)
+    correo = models.CharField(max_length=50)
