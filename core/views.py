@@ -85,13 +85,21 @@ def formularioContacto (request):
     if request.method == 'POST':
         form = forms.formularioContacto(request.POST)
         contacto = models.Contacto.objects.create(
-        nombre = request.POST['nombre'],
-        apellido = request.POST['apellido'],
-        telefono = request.POST['telefono'],
-        correo = request.POST['correo']
+            nombre = request.POST['nombre'],
+            apellido = request.POST['apellido'],
+            telefono = request.POST['telefono'],
+            correo = request.POST['correo']
         )
+        try:
+            if contacto.save():
+                return redirect('home')
+            else:
+                raise Exception('No se pudo guardar el contacto')
+        except:
+            return render(request, 'paginaProducto.html', {'form': forms.formularioContacto, 'error': 'Datos invalidos'})  
+        
     else:
-        return render(request, 'formularioContacto', {'form': forms.formularioContacto})
+        return render(request, 'paginaProducto.html', {'form': forms.formularioContacto})
 
 #Funcion para deslogear al usuario
 def cerrar_sesion(request):
