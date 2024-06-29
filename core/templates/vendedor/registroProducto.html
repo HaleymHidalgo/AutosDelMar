@@ -1,0 +1,18 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<section class="fondo-seccion">
+    <form class="form fondo-formulario flex-column-center" method="post" action="{% url 'registroProducto' %}">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="form-control">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+        {% endfor %} 
+        
+        <button type="submit" class="btn btn-info">Registrar producto</button>
+    </form>
+</section>
+{% endblock %}

@@ -81,6 +81,43 @@ def acceso_usuario(request):
         return render(request, 'acceso/acceso.html', {'form': forms.accesoUsuario})
 
 
+#vendedor
+def v_home(request):
+    if request.method == 'GET':
+        #Aqui nosotros obtenemos todos los productos que estan en la base de datos
+        vehiculos = models.Vehiculo.objects.all()
+        context = {'vehiculos': vehiculos}
+        #le vamos a pasarle el contexto a la plantilla
+        return render(request, 'vendedor/home.html', context)
+    
+def v_registroProducto(request):
+    if request.method == 'POST':
+        form = forms.registroVehiculo(request.POST)
+        
+        producto = models.Producto.objects.create(
+            precio = request.POST['precio'],
+            descripcion = request.POST['descripcion'],
+            cantidad = request.POST['cantidad'],
+            image = request.FILES['image']
+        )
+        vehiculo = models.Vehiculo.objects.create(
+            producto_id = producto,
+            marca = request.POST['marca'],
+            modelos = request.POST['modelos'],
+            carroceria = request.POST['carroceria'],
+            anio = request.POST['anio'],
+            combustible = request.POST['combustible'],
+            transmision = request.POST ['transmision']    
+        )
+        try:
+            producto.save()
+            vehiculo.save()
+            return redirect('v_home')
+        except Exception as e:
+            print(f'Error al crear producto: {e}')
+            return render(request, 'vendedor/registroProducto.html', {'form': form, 'error': 'Error al crear el producto'})
+    return render(request, 'vendedor/registroProducto.html', {'form': forms.registroVehiculo})
+
 #Funcion para deslogear al usuario
 def cerrar_sesion(request):
     logout(request)
