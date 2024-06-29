@@ -9,4 +9,6 @@ urlpatterns = [
     path('pagina_producto/<int:id>', views.paginaProducto, name='paginaProducto'),
     path('catalogo', views.catalogo, name='catalogo'),
     path('registro', views.registroUsuario, name='registroUsuario'),
+    path('cerrar_sesion', views.cerrar_sesion, name='cerrar_sesion'),
+    path('acceso_usuario', views.acceso_usuario, name='acceso_usuario'),
 ]

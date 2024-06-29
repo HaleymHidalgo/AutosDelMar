@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from . import models, forms
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
@@ -10,6 +13,7 @@ def home(request):
         #le vamos a pasarle el contexto a la plantilla
         return render(request, 'home.html', context)
 
+@login_required(login_url='home')
 def carrito(request):
     return render(request, 'carrito.html')
 
@@ -33,36 +37,51 @@ def catalogo(request):
         return render(request, 'catalogo.html', context)
     
 def registroUsuario(request):
-    #Si se accede por metodo POST, guardamos el usuario en la base de datos
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         form = forms.registroUsuario(request.POST)
-        #Validamos el formulario
+        print(form)
         if form.is_valid():
-            if (request.POST['password'] == request.POST['password_confirm']):
-                #Aqui creamos una instancia de la clase Usuario con los datos del formulario
-                usuario = models.Usuario.create(
-                    usuario_id=request.POST['usuario_id'],
-                    nombre=request.POST['nombre'],
-                    apellidop=request.POST['apellidop'],
-                    apellidom=request.POST['apellidom'],
-                    email=request.POST['email'],
-                    nr_telefono=request.POST['nr_telefono'],
-                    contraseña=request.POST['password']
-                )
-                #Guardamos el usuario en la base de datos y redireccionamos a la pagina de inicio
-                usuario.save()
-                #redirect recibe por parametro la url a la que queremos redireccionar (o el nombre)
-                return redirect(home)
-        
-        #Si no es valido, mostramos el formulario con los errores
+            
+            usuario = form.save()
+            login(request, usuario)
+            return redirect('home')
         else:
-            return render(request, 'acceso/registro.html', {
-                    'form': forms.registroUsuario,
-                    'error': 'Datos incorrectos, intente de nuevo.'
-                })
-    
+            return render(request, 'acceso/registro.html', {'form': form, 'error': 'Datos invalidos'})
     return render(request, 'acceso/registro.html', {'form': forms.registroUsuario})
 
+def acceso_usuario(request):
+    if request.method == 'POST':
+        form = forms.accesoUsuario(request.POST)
+        if form.is_valid():
+            clean_data = form.cleaned_data
+            usuario = authenticate(request,
+                        username=clean_data['usuario_id'],
+                        password=clean_data['password']
+                    )
+            if (usuario is not None):
+                if usuario.is_active:
+                    login(request, usuario)
+                    return redirect('home')
+                else:
+                    return render(request, 'acceso/acceso.html', {
+                        'form': forms.accesoUsuario,
+                        'error': 'El usuario no esta activo'
+                    })
+            else:
+                return render(request, 'acceso/acceso.html', {
+                    'form': forms.accesoUsuario,
+                    'error': 'El usuario no existe'
+                })
+        else:
+            return render(request, 'acceso/acceso.html', {
+                'form': forms.accesoUsuario,
+                'error': 'Datos invalidos'
+            })
+    else:
+        return render(request, 'acceso/acceso.html', {'form': forms.accesoUsuario})
 
 
-
+#Funcion para deslogear al usuario
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('home')

@@ -8,7 +8,14 @@
         <div class="container">
             <form class="form" method="POST" action="{% url 'registroUsuario' %}">
                 {% csrf_token %}
-                {{ form }}
+
+                {% for field in form %}
+                <div class="form-control">
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+                {% endfor %}
+
                 <p style="color: red;">{{ error }}</p>
                 <button>Confirmar</button>
             </form>
