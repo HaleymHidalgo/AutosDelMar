@@ -1,7 +1,7 @@
 from django.db import models
 
 class Producto(models.Model):
-    producto_id = models.IntegerField(primary_key=True)
+    producto_id = models.AutoField(primary_key=True)
     precio=models.IntegerField()
     descripcion=models.CharField( max_length=250)
     cantidad= models.IntegerField()
@@ -18,7 +18,10 @@ class Vehiculo(models.Model):
     producto_id=models.ForeignKey(Producto,on_delete=models.CASCADE)
     marca=models.CharField(max_length=100)
     modelo=models.CharField(max_length=100)
-
+    carroceria=models.CharField(max_length=50)
+    anio=models.IntegerField()
+    combustible=models.CharField(max_length=50)
+    transmision=models.CharField(max_length=50)
 
 
 class Tipo_usuario(models.Model):
