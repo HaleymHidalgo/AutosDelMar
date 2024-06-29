@@ -11,5 +11,7 @@ urlpatterns = [
     path('registro', views.registroUsuario, name='registroUsuario'),
     path('cerrar_sesion', views.cerrar_sesion, name='cerrar_sesion'),
     path('acceso_usuario', views.acceso_usuario, name='acceso_usuario'),
-    path('formularioContacto', views.formularioContacto, name='formularioContacto')
+    path('formularioContacto', views.formularioContacto, name='formularioContacto'),
+    path('vendedor/home', views.v_home, name='v_home' ),
+    path('vendedor/registroProducto',views.v_registroProducto, name='registroProducto'),
 ]
