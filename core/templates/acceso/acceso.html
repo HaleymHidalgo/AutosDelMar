@@ -6,7 +6,7 @@
     <div class="flex-column-center fondo-formulario mt-5">
         <img src="{% static '/assets/img/isotipo-autos-del-mar.png' %}" alt="">
         <div class="container">
-            <form class="form" method="POST" action="{% url 'acceso_usuario' %}">
+            <form class="form" id="formulario_id" method="POST">
                 {% csrf_token %}
 
                 {% for field in form %}
@@ -22,5 +22,6 @@
         </div>
     </div>
 </section>
+<script src="{% static 'assets/js/formAutenticacion.js' %}"></script>
 
 {% endblock %}

@@ -3,6 +3,7 @@ from . import models, forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
@@ -39,7 +40,6 @@ def catalogo(request):
 def registroUsuario(request):
     if request.method == 'POST':
         form = forms.registroUsuario(request.POST)
-        print(form)
         if form.is_valid():
             
             usuario = form.save()
@@ -49,6 +49,7 @@ def registroUsuario(request):
             return render(request, 'acceso/registro.html', {'form': form, 'error': 'Datos invalidos'})
     return render(request, 'acceso/registro.html', {'form': forms.registroUsuario})
 
+#Necesito editar las responses de los POST a 404
 def acceso_usuario(request):
     if request.method == 'POST':
         form = forms.accesoUsuario(request.POST)
@@ -60,8 +61,16 @@ def acceso_usuario(request):
                     )
             if (usuario is not None):
                 if usuario.is_active:
-                    login(request, usuario)
-                    return redirect('home')
+                    print(usuario)
+                    data = {
+                        'ok':True,
+                        'status': 200,
+                        'user':{
+                            'username':clean_data['usuario_id'],
+                            'password':clean_data['password']
+                        }
+                    }
+                    return JsonResponse(data)
                 else:
                     return render(request, 'acceso/acceso.html', {
                         'form': forms.accesoUsuario,
@@ -81,7 +90,10 @@ def acceso_usuario(request):
         return render(request, 'acceso/acceso.html', {'form': forms.accesoUsuario})
 
 
-#Funcion para deslogear al usuario
+#Funciones para logear y deslogear al usuario
+def iniciar_sesion(request):
+    login(request, user)
+
 def cerrar_sesion(request):
     logout(request)
     return redirect('home')
