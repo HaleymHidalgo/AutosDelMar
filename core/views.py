@@ -14,3 +14,6 @@ def home(request):
 
 def carrito(request):
     return render(request, 'carrito.html')
+
+def nosotros(request):
+    return render(request, 'nosotros.html')
