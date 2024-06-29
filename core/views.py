@@ -20,3 +20,11 @@ def paginaProducto(request, id):
         'vehiculo': vehiculo,
     }
     return render(request, 'paginaProducto.html', context)
+
+def catalogo(request):
+    if request.method == 'GET':
+        #Aqui nosotros obtenemos todos los productos que estan en la base de datos
+        vehiculos = models.Vehiculo.objects.all()
+        context = {'vehiculos': vehiculos}
+        #le vamos a pasarle el contexto a la plantilla
+        return render(request, 'catalogo.html', context)
