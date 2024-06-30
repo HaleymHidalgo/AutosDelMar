@@ -13,5 +13,5 @@ urlpatterns = [
     path('acceso_usuario', views.acceso_usuario, name='acceso_usuario'),
     path('formularioContacto', views.formularioContacto, name='formularioContacto'),
     path('vendedor/home', views.v_home, name='v_home' ),
-    path('vendedor/registroProducto',views.v_registroProducto, name='registroProducto'),
+    path('vendedor/registroVehiculo',views.v_registroVehiculo, name='registroVehiculo'),
 ]

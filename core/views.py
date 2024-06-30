@@ -145,33 +145,33 @@ def v_home(request):
         #le vamos a pasarle el contexto a la plantilla
         return render(request, 'vendedor/home.html', context)
     
-def v_registroProducto(request):
+def v_registroVehiculo(request):
     if request.method == 'POST':
-        form = forms.registroVehiculo(request.POST)
-        
-        producto = models.Producto.objects.create(
-            precio = request.POST['precio'],
-            descripcion = request.POST['descripcion'],
-            cantidad = request.POST['cantidad'],
-            image = request.FILES['image']
-        )
-        vehiculo = models.Vehiculo.objects.create(
-            producto_id = producto,
-            marca = request.POST['marca'],
-            modelos = request.POST['modelos'],
-            carroceria = request.POST['carroceria'],
-            anio = request.POST['anio'],
-            combustible = request.POST['combustible'],
-            transmision = request.POST ['transmision']    
-        )
-        try:
+        form = forms.registroVehiculo(request.POST,request.FILES)
+        if form.is_valid():
+            producto = models.Producto.objects.create(
+                    precio = form.cleaned_data['precio'],
+                    descripcion = form.cleaned_data['descripcion'],
+                    cantidad = form.cleaned_data['cantidad'],
+                    image = form.cleaned_data['image'])
             producto.save()
-            vehiculo.save()
-            return redirect('v_home')
-        except Exception as e:
-            print(f'Error al crear producto: {e}')
-            return render(request, 'vendedor/registroProducto.html', {'form': form, 'error': 'Error al crear el producto'})
-    return render(request, 'vendedor/registroProducto.html', {'form': forms.registroVehiculo})
+            vehiculo = models.Vehiculo.objects.create(
+                    producto_id=producto,
+                    marca=form.cleaned_data['marca'],
+                    modelo=form.cleaned_data['modelo'],
+                    carroceria=form.cleaned_data['carroceria'],
+                    anio=form.cleaned_data['anio'],
+                    combustible=form.cleaned_data['combustible'],
+                    transmision=form.cleaned_data['transmision']
+                )
+            try:
+                producto.save()
+                vehiculo.save()
+                return redirect('v_home')
+            except Exception as e:
+                print(f'Error al crear producto: {e}')
+                return render(request, 'vendedor/registroVehiculo.html', {'form': form, 'error': 'Error al crear el producto'})
+    return render(request, 'vendedor/registroVehiculo.html', {'form': forms.registroVehiculo})
 
 #Funcion para deslogear al usuario
 def cerrar_sesion(request):

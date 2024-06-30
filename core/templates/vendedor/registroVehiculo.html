@@ -2,7 +2,7 @@
 {% block content %}
 
 <section class="fondo-seccion">
-    <form class="form fondo-formulario flex-column-center" method="post" action="{% url 'registroProducto' %}">
+    <form class="form fondo-formulario flex-column-center" method="post" action="{% url 'registroVehiculo' %}" enctype="multipart/form-data">
         {% csrf_token %}
         
         {% for field in form %}
@@ -12,7 +12,7 @@
         </div>
         {% endfor %} 
         
-        <button type="submit" class="btn btn-info">Registrar producto</button>
+        <button type="submit" class="btn btn-info">Registrar Vehiculos</button>
     </form>
 </section>
 {% endblock %}
