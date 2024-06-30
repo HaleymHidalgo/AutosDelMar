@@ -173,9 +173,36 @@ def v_registroVehiculo(request):
                 return render(request, 'vendedor/registroVehiculo.html', {'form': form, 'error': 'Error al crear el producto'})
     return render(request, 'vendedor/registroVehiculo.html', {'form': forms.registroVehiculo})
 
+def v_paginaProducto(request, id):
+    #Aqui nosotros obtenemos el producto que queremos mostrar
+    vehiculo = models.Vehiculo.objects.get(producto_id=id)
+
+    llenar_datos ={
+        'marca': vehiculo.marca,
+        'modelo': vehiculo.modelo,
+        'carroceria': vehiculo.carroceria,
+        'combustible': vehiculo.combustible,
+        'anio': vehiculo.anio,
+        'transmision': vehiculo.transmision,
+        'precio': vehiculo.producto_id.precio,
+        'descripcion': vehiculo.producto_id.descripcion,
+        'cantidad': vehiculo.producto_id.cantidad,
+        'image': vehiculo.producto_id.image,
+    }
+    form= forms.registroVehiculo(initial=llenar_datos)
+
+    context = {
+        'vehiculo': vehiculo,
+        'formulario': form,
+    }
+
+    return render(request, 'vendedor/paginaProducto.html',context)
+
+def v_eliminarProducto(request, id):
+    vehiculo = models.Vehiculo.objects.get(producto_id=id)
+    vehiculo.delete()
+    return redirect('v_home')
 #Funcion para deslogear al usuario
 def cerrar_sesion(request):
     logout(request)
     return redirect('home')
-
-#funcion enviar correo
