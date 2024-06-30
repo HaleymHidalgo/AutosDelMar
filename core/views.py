@@ -6,12 +6,17 @@ from django.contrib.auth.decorators import login_required
 import ssl
 import smtplib
 from email.message import EmailMessage
+from django.conf import settings
+
 # Create your views here.
 def home(request):
     if request.method == 'GET':
         #Aqui nosotros obtenemos todos los productos que estan en la base de datos
         vehiculos = models.Vehiculo.objects.all()
-        context = {'vehiculos': vehiculos}
+        context = {
+            'vehiculos': vehiculos,
+            'MEDIA_URL': settings.MEDIA_URL
+            }
         #le vamos a pasarle el contexto a la plantilla
         return render(request, 'home.html', context)
 

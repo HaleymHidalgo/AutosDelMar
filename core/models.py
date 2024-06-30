@@ -7,7 +7,10 @@ class Producto(models.Model):
     descripcion=models.CharField( max_length=250)
     cantidad= models.IntegerField()
     estado_producto = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='media/db-img/%Y-%m-%d-%h-%m-%s', default='media/db-img/default.jpg')
+    image = models.ImageField(upload_to='')
+    
+    def __str__(self):
+        return str(self.producto_id)
     
 class Accesorios(models.Model):
     producto_id=models.ForeignKey(Producto,on_delete=models.CASCADE)
