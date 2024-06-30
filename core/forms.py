@@ -1,21 +1,6 @@
-# forms.py
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-
-class registroUsuario(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
-        labels = {
-            'username': 'RUT (sin puntos)',
-            'first_name': 'Nombre',
-            'last_name': 'Apellido',
-            'email': 'Correo electrónico',
-            'password1': 'Contraseña',
-            'password2': 'Confirmar contraseña'
-        }
+from django.contrib.auth.models import User, Group
 
 class formularioContacto(forms.Form):
     nombre = forms.CharField(label="Ingrese su nombre", max_length=50)
@@ -38,4 +23,29 @@ class registroVehiculo(forms.Form):
     cantidad = forms.IntegerField(label="cantidad de vehiculo")
     descripcion = forms.CharField(label="descripcion", max_length=250)
     image = forms.ImageField()
+
+class registroUsuario(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+        labels = {
+            'username': 'RUT (sin puntos)',
+            'first_name': 'Nombre',
+            'last_name': 'Apellido',
+            'email': 'Correo electrónico',
+            'password1': 'Contraseña',
+            'password2': 'Confirmar contraseña'
+        }
     
+    """
+    def __init__(self, *args, **kwargs):
+        super(registroUsuario, self).__init__(*args, **kwargs)
+        # Obtén el grupo predeterminado
+        default_group = Group.objects.get(name='cliente')
+        # Establecer el valor inicial para el campo 'groups'
+        self.fields['groups'].initial = [default_group.pk]
+        # Modificar el widget del campo 'groups' para que no permita la selección múltiple
+        self.fields['groups'].widget = forms.Select(choices=self.fields['groups'].choices)
+        # Modificar el widget del campo 'groups' para deshabilitarlo
+        self.fields['groups'].widget.attrs['disabled'] = 'disabled'
+    """
