@@ -1,5 +1,6 @@
+//funcion guardar datos en local storage
 const carrito = () => {
-    const idProducto = (document.getElementById('idProducto').textContent);
+    const idProducto = parseInt(document.getElementById('idProducto').textContent);
 
     if(localStorage.getItem('carritoCompra') !== null){
         const carrito = JSON.parse(localStorage.getItem('carritoCompra'))
@@ -17,14 +18,10 @@ const carrito = () => {
         }
         localStorage.setItem('carritoCompra', JSON.stringify([producto]))
     }
-    console.log("se añadio el producto al carrito")
 }
 
-const btn = document.getElementById('btnPrueba')
+const btn = document.getElementById('btnAniadir')
 btn.addEventListener('click', carrito)
-
-
-
 
 
 
