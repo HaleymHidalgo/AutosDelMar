@@ -11,6 +11,10 @@ from django.conf import settings
 # Create your views here.
 def home(request):
     if request.method == 'GET':
+        if(request.user.is_authenticated):
+            grupos = request.user.groups.values_list('name', flat=True)
+            if list(grupos)[0] == 'vendedor':
+                return redirect('v_home')
         #Aqui nosotros obtenemos todos los productos que estan en la base de datos
         vehiculos = models.Vehiculo.objects.all()
         context = {
@@ -20,14 +24,22 @@ def home(request):
         #le vamos a pasarle el contexto a la plantilla
         return render(request, 'home.html', context)
 
-@login_required(login_url='home')
+@login_required(login_url='acceso_usuario')
 def carrito(request):
     return render(request, 'carrito.html')
 
 def nosotros(request):
+    if(request.user.is_authenticated):
+            grupos = request.user.groups.values_list('name', flat=True)
+            if list(grupos)[0] == 'vendedor':
+                return redirect('v_home')
     return render(request, 'nosotros.html')
 
 def paginaProducto(request, id):
+    if(request.user.is_authenticated):
+            grupos = request.user.groups.values_list('name', flat=True)
+            if list(grupos)[0] == 'vendedor':
+                return redirect('v_home')
     #Aqui nosotros obtenemos el producto que queremos mostrar
     vehiculo = models.Vehiculo.objects.get(producto_id=id)
     context = {
@@ -38,6 +50,10 @@ def paginaProducto(request, id):
 
 def catalogo(request):
     if request.method == 'GET':
+        if(request.user.is_authenticated):
+            grupos = request.user.groups.values_list('name', flat=True)
+            if list(grupos)[0] == 'vendedor':
+                return redirect('v_home')
         #Aqui nosotros obtenemos todos los productos que estan en la base de datos
         vehiculos = models.Vehiculo.objects.all()
         context = {'vehiculos': vehiculos}
@@ -45,6 +61,10 @@ def catalogo(request):
         return render(request, 'catalogo.html', context)
     
 def registroUsuario(request):
+    if(request.user.is_authenticated):
+            grupos = request.user.groups.values_list('name', flat=True)
+            if list(grupos)[0] == 'vendedor':
+                return redirect('v_home')
     if request.method == 'POST':
         form = forms.registroUsuario(request.POST)
         print(form)
@@ -69,7 +89,8 @@ def acceso_usuario(request):
             if (usuario is not None):
                 if usuario.is_active:
                     login(request, usuario)
-                    return redirect('home')
+                    return redirect('v_home') if usuario.is_vendedor else redirect('home')
+                
                 else:
                     return render(request, 'acceso/acceso.html', {
                         'form': forms.accesoUsuario,
@@ -137,6 +158,7 @@ def formularioContacto (request):
         return render(request, 'paginaProducto.html', {'form': forms.formularioContacto})
 
 #vendedor
+@login_required(login_url='acceso_usuario')
 def v_home(request):
     if request.method == 'GET':
         #Aqui nosotros obtenemos todos los productos que estan en la base de datos
@@ -144,7 +166,9 @@ def v_home(request):
         context = {'vehiculos': vehiculos}
         #le vamos a pasarle el contexto a la plantilla
         return render(request, 'vendedor/home.html', context)
-    
+    else:
+        return redirect('home')
+        
 def v_registroVehiculo(request):
     if request.method == 'POST':
         form = forms.registroVehiculo(request.POST,request.FILES)
