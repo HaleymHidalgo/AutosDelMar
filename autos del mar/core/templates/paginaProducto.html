@@ -1,0 +1,117 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<!-- Carousel Section -->
+{% load static %}
+<section class="container-max section-carrusel">
+    <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner" id="carouselContenedor">
+            <div class="carousel-item active">
+                <img class="d-block img-carrucel w-50 mx-auto" 
+                    src="{{ vehiculo.producto_id.image.url}}" 
+                    alt="{{vehiculo.modelo}}" 
+                    style="background-color: white;">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block img-carrucel w-50 mx-auto" 
+                    src="{{ vehiculo.producto_id.image.url}}" 
+                    alt="{{vehiculo.modelo}}" 
+                    style="background-color: white;">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block img-carrucel w-50 mx-auto" 
+                    src="{{ vehiculo.producto_id.image.url}}" 
+                    alt="{{vehiculo.modelo}}" 
+                    style="background-color: white;">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block img-carrucel w-50 mx-auto" 
+                src="{{ vehiculo.producto_id.image.url}}" 
+                alt="{{vehiculo.modelo}}" 
+                style="background-color: white;">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+<!-- Información de Producto -->
+<section class="fondo-seccion">
+    <div class="titulo-seccion">
+        <h1 id="modeloProd">{{vehiculo.modelo}}</h1>
+        <h2 id="marcaProd">{{vehiculo.marca}}</h2>
+    </div>
+
+    <p class="parrafo-seccion" id="descripcionProd">{{vehiculo.producto_id.descripcion}}</p>
+    <p style="display: none;" id="idProducto">{{vehiculo.producto_id}}</p>
+    <div id="info-producto" class="flex-row-center justify-content-around texto-azul">
+        <h3 id="precioProd">Precio: ${{vehiculo.producto_id.precio}}</h3>
+        <h3 id="stockProd">Nr°Stock: {{vehiculo.producto_id.cantidad}}</h3>
+    </div>
+
+    <div class="flex-column-center">
+        <h3 class="titulo-seccion">Detalles del vehiculo</h3>
+        <table class="tabla-compras">
+            <tbody>
+                <tr>
+                    <th>Marca</th>
+                    <td id="marcaProd">{{vehiculo.marca}}</td>
+                </tr>
+                <tr>
+                    <th>Modelo</th>
+                    <td id="modeloProd">{{vehiculo.modelo}}</td>
+                </tr>
+                <tr>
+                    <th>Carroceria</th>
+                    <td id="CarroceriaProd">{{vehiculo.carroceria}}</td>
+                </tr>
+                <tr>
+                    <th>Año</th>
+                    <td id="anioProd">{{vehiculo.anio}}</td>
+                </tr>
+                <tr>
+                    <th>Combustible</th>
+                    <td id="combustibleProd">{{vehiculo.combustible}}</td>
+                </tr>
+                <tr>
+                    <th>Transmision</th>
+                    <td id="transmisionProd">{{vehiculo.transmision}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <section>
+        <div class="flex-column-center fondo-formulario mt-5">
+            <div class="container">
+                <form class="form" method="POST" action="{% url 'formularioContacto' %}">
+                    {% csrf_token %}
+    
+                    {% for field in formulario%}
+                    <div class="form-control">
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    
+                    <p style="color: red;">{{ error }}</p>
+                    
+                    <div id="productos">
+                        <div class="flex-column-center">
+                            <button id="btnAdd" class="btn btn-info">Contactanos</button>
+                        </div>
+                    </div>
+                </form>
+                <button style="display: none" id="btnPrueba" class="btn btn-info">Agregar Producto</button>
+            </div>
+        </div>
+    </section>
+</section>
+<script src="{% static 'assets/js/carrito.js' %}"></script>
+{% endblock %}

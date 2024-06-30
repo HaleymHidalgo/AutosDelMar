@@ -1,0 +1,57 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Carousel Section -->
+<section class="container-max section-carrusel">
+    <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'assets/img/carrucel-1.jpg' %}" class="d-block img-carrucel w-50 mx-auto" alt="bg-auto" />
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'assets/img/carrucel-2.jpg' %}" class="d-block img-carrucel w-50 mx-auto" alt="bg-bmw" />
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'assets/img/carrucel-3.jpg' %}"
+                    class="d-block img-carrucel w-50 mx-auto" alt="bg-porsche" />
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+<!-- Most Sales -->
+<section class="fondo-seccion">
+    <h1 class="titulo-seccion">Lo más vendido</h1>
+    <div class="container-fluid">
+        <div id="rowCards" class="row flex-row-center">
+            <!-- Aqui se añaden las cards -->
+            {% for vehiculo in vehiculos %}
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12 flex-row-center">
+                <div class="card">
+                    <img src="{{vehiculo.producto_id.image.url}}"
+                        class="card-img"
+                        alt="{{vehiculo.modelo}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{vehiculo.modelo}}</h5>
+                        <p>{{vehiculo.marca}}</p>
+                        <a href="pagina_producto/{{vehiculo.producto_id.producto_id}}" class="btn btn-info">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Scripts del Proyecto -->
+<script type="module" src=""></script>
+{% endblock %}

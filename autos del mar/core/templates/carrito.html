@@ -1,0 +1,30 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<h1 class="titulo-seccion">Carrito de Compras</h1>
+<div class="row">
+    <main id="contenedorProductos" class="col-xl-8 col-md-8">
+        {%for producto in productos %}
+        <article id="contenedor" class="fondo-seccion flex-row-center row">
+            <img src="{{producto.image.url}}" alt="img" class="col-xl-6 col-md-7">
+            <div class="flex-column-center col-xl-6 col-md-5">
+                <p id="cantidadProducto">{{producto.cantidad}}</p>
+                <p id="precioProducto">{{producto.precio}}</p>
+                <button data-producto-id="{{producto.producto_id}}" id="btnEliminar" class="btn btn-danger">Eliminar</button>
+            </div>
+        </article>
+        {% endfor %}
+    </main>
+    <aside class=" col-xl-4 col-md-4">
+        <article class="precio-background flex-column-center texto-blanco">
+            <h3>Total a Pagar</h2>
+            <p id="precioTotal">{{ total }}</p>
+            <button id="btnComprar" class="btn btn-primary boton">Comprar</button>
+            <button id="btnLimpiar" class="btn btn-primary boton">Limpiar</button>
+        </article>
+    </aside>
+</div>
+
+
+
+{% endblock %}
