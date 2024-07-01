@@ -27,10 +27,7 @@ def home(request):
                 print(f"Error: {str(e)}")
         #Aqui nosotros obtenemos todos los productos que estan en la base de datos
         vehiculos = models.Vehiculo.objects.all()
-        context = {
-            'vehiculos': vehiculos,
-            'MEDIA_URL': settings.MEDIA_URL
-            }
+        context = {'vehiculos': vehiculos}
         #le vamos a pasarle el contexto a la plantilla
         return render(request, 'home.html', context)
 
@@ -69,6 +66,8 @@ def catalogo(request):
         context = {'vehiculos': vehiculos}
         #le vamos a pasarle el contexto a la plantilla
         return render(request, 'catalogo.html', context)
+    else:
+        return HttpResponse("idkmen")
     
 def registroUsuario(request):
     if(request.user.is_authenticated):
@@ -133,10 +132,25 @@ def enviarCorreo(contacto):
     contraseña = 'ynms qvch shzj yfhd'
     To = contacto.correo
     print (contacto.correo)
-    Subject = 'Cita confirmada'
-    Body = """
-    Su cita a sido confirmada lo llamaremos para mas informacion.
-    """
+    Subject = 'Confirmación de Cita - Autos del Mar'
+    Body = f"""
+Estimado/a {contacto.nombre} {contacto.apellido},
+
+Nos complace confirmar su cita con Autos del Mar
+para la reserva de un vehiculo. Le recomendamos
+llegar unos minutos antes de su cita para
+asegurar que podamos atenderle puntualmente.
+
+Si tiene alguna pregunta o necesita reprogramar,
+no dude en contactarnos respondiendo a este correo.
+
+Gracias por elegir Autos del Mar. ¡Esperamos verle pronto!
+
+Atentamente,
+
+Autos del Mar
+{Email}
+"""
 
     # Crear objeto de mail
     em = EmailMessage()
@@ -155,7 +169,6 @@ def enviarCorreo(contacto):
 
 def formularioContacto (request):
     if request.method == 'POST':
-        form = forms.formularioContacto(request.POST)
         contacto = models.Contacto.objects.create(
             nombre = request.POST['nombre'],
             apellido = request.POST['apellido'],
@@ -204,7 +217,7 @@ def v_registroVehiculo(request):
                 precio = request.POST['precio'],
                 descripcion = request.POST['descripcion'],
                 cantidad = request.POST['cantidad'],
-                image = imgPath
+                image = settings.MEDIA_URL + 'db-images/vehiculos/' + nameImg
             )
             #Guardamos el producto en la base de datos
             producto.save()
@@ -247,46 +260,65 @@ def v_paginaProducto(request, id):
             'precio': vehiculo.producto_id.precio,
             'descripcion': vehiculo.producto_id.descripcion,
             'cantidad': vehiculo.producto_id.cantidad,
-            'image': vehiculo.producto_id.image.url,
+            'image': vehiculo.producto_id.image
         }
         form= forms.registroVehiculo(initial=llenar_datos)
         context = {
             'vehiculo': vehiculo,
             'formulario': form,
             'titulo':'Detalles del Vehículo',
-            'imagen':vehiculo.producto_id.image.url
+            'hiddenImagen':vehiculo.producto_id.image,
+            'hiddenId':vehiculo.producto_id.producto_id
         }
-        return render(request, 'vendedor/paginaProducto.html',context)
+        return render(request, 'vendedor/paginaProducto.html', context)
     
 def modificarProducto(request):
     #Aqui actualizaremos los datos del producto
     if request.method == 'POST':
-        print('ok')
-        image = Image.open(request.POST.get('image'))
-        image.show()
-        form = forms.registroVehiculo(request.POST,request.FILES)
-        if form.is_valid():
-            producto = models.Producto.objects.create(
-                    precio = form.cleaned_data['precio'],
-                    descripcion = form.cleaned_data['descripcion'],
-                    cantidad = form.cleaned_data['cantidad'],
-                    image = form.cleaned_data['image'])
-            print(producto)
+        try:
+            if 'imgProducto' in request.FILES:
+                #nombre Archivo (Fecha y hora de guardado)
+                nameImg = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.png'
+                #Creamos una ruta para guardar la imagen en el servidor
+                imgPath = os.path.join(settings.MEDIA_ROOT, 'db-images/vehiculos/', nameImg)
+                #verifica que el directorio existe (si no existe lo crea)
+                os.makedirs(os.path.dirname(imgPath), exist_ok=True)
+                #Creamos una instancia de la clase Image de la libreria PIL para guardar la imagen
+                img = Image.open(request.FILES['imgProducto'])
+                img.save(imgPath)
+                #URL de la imagen para la base de datos
+                imgURL = settings.MEDIA_URL + '/db-images/vehiculos/' + nameImg
+            else:
+                imgURL = request.POST['imgProductoOld']
+            
+            #Obtenemos los datos del producto y vehiculo de la base de datos
+            producto_id = request.POST['idProducto']
+            producto = models.Producto.objects.get(producto_id=producto_id)
+            vehiculo = models.Vehiculo.objects.get(producto_id=producto)
+            
+            # Actualizamos los datos del producto
+            producto.precio = request.POST['precio']
+            producto.descripcion = request.POST['descripcion']
+            producto.cantidad = request.POST['cantidad']
+            producto.image = imgURL
             producto.save()
-            vehiculo = models.Vehiculo.objects.create(
-                    producto_id=producto,
-                    marca=form.cleaned_data['marca'],
-                    modelo=form.cleaned_data['modelo'],
-                    carroceria=form.cleaned_data['carroceria'],
-                    anio=form.cleaned_data['anio'],
-                    combustible=form.cleaned_data['combustible'],
-                    transmision=form.cleaned_data['transmision']
-                )
-            print(vehiculo)
+            
+            # Actualizamos los datos del vehículo
+            vehiculo.marca = request.POST['marca']
+            vehiculo.modelo = request.POST['modelo']
+            vehiculo.carroceria = request.POST['carroceria']
+            vehiculo.anio = request.POST['anio']
+            vehiculo.combustible = request.POST['combustible']
+            vehiculo.transmision = request.POST['transmision']
             vehiculo.save()
+            
+            #Redireccionamos a la pagina de inicio
             return redirect('v_home')
-        else:
-            return HttpResponse('esta malo')
+            
+        except Exception as e:
+            print(f'Error al crear producto: {e}')
+            #Modificar para que no se pierdan los datos <---
+            return render(request, 'vendedor/v_home')
 
 @login_required(login_url='acceso_usuario')
 def v_eliminarProducto(request, id):

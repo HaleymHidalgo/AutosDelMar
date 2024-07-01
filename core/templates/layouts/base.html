@@ -103,14 +103,22 @@
         <div class="flex-row-center row">
             <div class="flex-column-center texto-gris col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <h3 class="texto-blanco">¿Donde Encontrarnos?</h3>
-                <p>Av.General Fulano 356. Santiago Región Metropolitana</p>
+                <a href="https://www.google.com/maps/search/Av.+General+Fulano+456.+Santiago+Region+Metropolitana/@-33.5435168,-70.604128,17z/data=!3m1!4b1?entry=ttu">
+                    Av.General Fulano 456. Santiago Región Metropolitana
+                </a>
             </div>
             <div class="flex-column-center texto-gris col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <h3 class="texto-blanco">Quienes Somos</h3>
                 <ul class="no-lista-style flex-column-center">
-                    <li>Preguntas Frecuentes</li>
-                    <li>Productos</li>
-                    <li>Servicios</li>
+                    <li>
+                        <a href="{% url 'nosotros' %}">Preguntas Frecuentes</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'catalogo' %}">Productos</a>
+                    </li>
+                    <li>
+                        <a href="">Servicios</a>
+                    </li>
                 </ul>
             </div>
             <div class="flex-column-center texto-gris col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">

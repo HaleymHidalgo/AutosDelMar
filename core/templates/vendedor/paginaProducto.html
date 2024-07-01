@@ -13,10 +13,18 @@
             {{ field }}
         </div>
         {% endfor %}
-        <img src="{{imagen}}" alt="image" class="card-img">
+        <div class="form-control">
+            <label for="imgProducto">Imagen del Vehículo</label>
+            <input type="file" name="imgProducto" id="imgProducto">
+            <img src="{{hiddenImagen}}" alt="image" class="card-img">
+        </div>
+        <div style="display: none;">
+            <input type="hidden" name="imgProductoOld" value="{{hiddenImagen}}">
+            <input type="hidden" name="idProducto" value="{{hiddenId}}" id="hiddenId">
+        </div>
         <div class="flex-row-center" style="width: 80%;">
             <button id="editarbtn" class="btn btn-success boton">Guardar</button>
-            <button id="eliminarbtn" class="btn btn-danger boton" data-vehiculo-id="{{vehiculo.producto_id.producto_id}}">Eliminar</button>
+            <button id="eliminarbtn" class="btn btn-danger boton" type="button">Eliminar</button>
         </div>
     </form>    
 </section>

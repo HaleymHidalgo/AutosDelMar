@@ -16,6 +16,8 @@ class Accesorios(models.Model):
     producto_id=models.ForeignKey(Producto,on_delete=models.CASCADE)
     nombre=models.CharField(max_length=100)
     distribuidor=models.CharField(max_length=100)
+    def __str__(self):
+        return str(self.nombre)
     
 class Vehiculo(models.Model):
     #No es un campo de texto, es un Objecto Producto
@@ -26,6 +28,9 @@ class Vehiculo(models.Model):
     anio=models.IntegerField()
     combustible=models.CharField(max_length=50)
     transmision=models.CharField(max_length=50)
+    
+    def __str__(self):
+        return str(self.marca + ' ' + self.modelo)
         
 class Venta(models.Model):
     venta_id=models.IntegerField(primary_key=True)
@@ -45,3 +50,6 @@ class Contacto (models.Model):
     apellido = models.CharField(max_length=50)
     telefono = models.CharField(max_length=50)
     correo = models.CharField(max_length=50)
+    
+    def __str__(self):
+            return str(self.nombre + ' ' + self.apellido)

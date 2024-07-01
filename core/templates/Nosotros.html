@@ -1,4 +1,5 @@
 {%extends 'layouts/base.html'%}
+{% load static %}
 {%block content%}
 
     <!-- Carousel Section -->
@@ -7,21 +8,21 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img
-                        src="./assets/img/bg-auto.webp"
+                        src="{% static 'assets/img/carrucel-1.jpg' %}"
                         class="d-block img-carrucel w-50 mx-auto"
                         alt="bg-auto"
                     />
                 </div>
                 <div class="carousel-item">
                     <img
-                        src="./assets/img/bmw-m3-gtr.jpeg"
+                        src="{% static 'assets/img/carrucel-2.jpg' %}"
                         class="d-block img-carrucel w-50 mx-auto"
                         alt="bg-bmw"
                     />
                 </div>
                 <div class="carousel-item">
                     <img
-                        src="./assets/img/black_porsche_carrera_gt_car_4k_hd_cars-3840x2160.jpg"
+                        src="{% static 'assets/img/carrucel-3.jpg' %}"
                         class="d-block img-carrucel w-50 mx-auto"
                         alt="bg-porsche"
                     />
@@ -58,17 +59,8 @@
     <section class="seccion-cartas">
         <h2 class="titulo-seccion">Acerca de Nosotros</h2>
         <p class="parrafo-seccion">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
-            <br><br>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
+            En Autos del Mar, nos dedicamos apasionadamente a proporcionar a nuestros clientes una experiencia automotriz excepcional. Nos especializamos en la venta de automóviles de las principales marcas y una amplia variedad de accesorios diseñados para mejorar y personalizar tu vehículo según tus necesidades y gustos.
+            Nuestra misión es ser más que una automotora; somos un equipo comprometido con la excelencia en el servicio al cliente y la calidad de nuestros productos. Desde nuestro compromiso con la satisfacción del cliente hasta nuestro enfoque en la innovación y la fiabilidad, en Autos del Mar nos esforzamos por establecer estándares más altos en el mercado automotriz.
         </p>
     </section>
 
