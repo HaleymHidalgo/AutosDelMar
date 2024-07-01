@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from . import models, forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
@@ -7,6 +7,8 @@ import ssl
 import smtplib
 from email.message import EmailMessage
 from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def home(request):
@@ -180,7 +182,8 @@ def v_home(request):
         return render(request, 'vendedor/home.html', context)
     else:
         return redirect('home')
-        
+
+@login_required(login_url='acceso_usuario')
 def v_registroVehiculo(request):
     if request.method == 'POST':
         form = forms.registroVehiculo(request.POST,request.FILES)
@@ -209,36 +212,49 @@ def v_registroVehiculo(request):
                 return render(request, 'vendedor/registroVehiculo.html', {'form': form, 'error': 'Error al crear el producto'})
     return render(request, 'vendedor/registroVehiculo.html', {'form': forms.registroVehiculo})
 
+@login_required(login_url='acceso_usuario')
 def v_paginaProducto(request, id):
     #Aqui nosotros obtenemos el producto que queremos mostrar
-    vehiculo = models.Vehiculo.objects.get(producto_id=id)
+    if request.method == 'GET':
+        vehiculo = models.Vehiculo.objects.get(producto_id=id)
 
-    llenar_datos ={
-        'marca': vehiculo.marca,
-        'modelo': vehiculo.modelo,
-        'carroceria': vehiculo.carroceria,
-        'combustible': vehiculo.combustible,
-        'anio': vehiculo.anio,
-        'transmision': vehiculo.transmision,
-        'precio': vehiculo.producto_id.precio,
-        'descripcion': vehiculo.producto_id.descripcion,
-        'cantidad': vehiculo.producto_id.cantidad,
-        'image': vehiculo.producto_id.image,
-    }
-    form= forms.registroVehiculo(initial=llenar_datos)
+        llenar_datos ={
+            'marca': vehiculo.marca,
+            'modelo': vehiculo.modelo,
+            'carroceria': vehiculo.carroceria,
+            'combustible': vehiculo.combustible,
+            'anio': vehiculo.anio,
+            'transmision': vehiculo.transmision,
+            'precio': vehiculo.producto_id.precio,
+            'descripcion': vehiculo.producto_id.descripcion,
+            'cantidad': vehiculo.producto_id.cantidad,
+            'image': vehiculo.producto_id.image.url,
+        }
+        form= forms.registroVehiculo(initial=llenar_datos)
+        context = {
+            'vehiculo': vehiculo,
+            'formulario': form,
+            'titulo':'Detalles del Vehículo',
+            'imagen':vehiculo.producto_id.image.url
+        }
+        return render(request, 'vendedor/paginaProducto.html',context)
 
-    context = {
-        'vehiculo': vehiculo,
-        'formulario': form,
-    }
-
-    return render(request, 'vendedor/paginaProducto.html',context)
-
+@login_required(login_url='acceso_usuario')
 def v_eliminarProducto(request, id):
-    vehiculo = models.Vehiculo.objects.get(producto_id=id)
-    vehiculo.delete()
-    return redirect('v_home')
+    if request.method == 'DELETE':
+        try:
+            producto = get_object_or_404(models.Producto, producto_id=id)
+            producto.delete()
+            return JsonResponse({'message': 'Vehículo eliminado con éxito'}, status=204)
+        except models.Producto.DoesNotExist:
+            return JsonResponse({'message': 'El vehículo no existe'}, status=404)
+        except Exception as e:
+            return JsonResponse({'message': f'Error al eliminar el vehículo: {str(e)}'}, status=500)
+    else:
+        return JsonResponse('message', status=405)
+
 #Funcion para deslogear al usuario
+@login_required(login_url='acceso_usuario')
 def cerrar_sesion(request):
     logout(request)
     return redirect('home')

@@ -1,16 +1,18 @@
 {% extends 'vendedor/base.html' %}
 {% block content %}
 
-<section class="fondo-seccion">
+<section>
+    <h1 class="titulo-seccion"> Registro de Vehiculo </h1>
     <form class="form fondo-formulario flex-column-center" method="post" action="{% url 'registroVehiculo' %}" enctype="multipart/form-data">
-        {% csrf_token %}
         
+        {% csrf_token %}
+
         {% for field in form %}
         <div class="form-control">
             {{ field.label_tag }}
             {{ field }}
         </div>
-        {% endfor %} 
+        {% endfor %}
         
         <button type="submit" class="btn btn-info">Registrar Vehiculos</button>
     </form>

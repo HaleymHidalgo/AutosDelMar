@@ -13,15 +13,15 @@ class accesoUsuario(forms.Form):
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
 
 class registroVehiculo(forms.Form):
-    marca = forms.CharField(label= "la marca del vehiculo",max_length=30)
-    modelo = forms.CharField(label= "el modelo del vehiculo",max_length=30)
-    carroceria = forms.CharField(label= "la carroceria del vehiculo",max_length=30)
-    combustible = forms.CharField(label= "el combustible del vehiculo",max_length=30)
-    anio = forms.IntegerField(label= "el año del vehiculo")
-    transmision = forms.CharField(label= "la transmisión del vehiculo",max_length=30)
-    precio = forms.IntegerField(label= "el precio del vehiculo")
-    cantidad = forms.IntegerField(label="cantidad de vehiculo")
-    descripcion = forms.CharField(label="descripcion", max_length=250)
+    marca = forms.CharField(label= "Marca:",max_length=30)
+    modelo = forms.CharField(label= "Modelo:",max_length=30)
+    carroceria = forms.CharField(label= "Carrocería",max_length=30)
+    combustible = forms.CharField(label= "Tipo de Combustible",max_length=30)
+    anio = forms.IntegerField(label= "Año del vehículo")
+    transmision = forms.CharField(label= "Transmisión",max_length=30)
+    precio = forms.IntegerField(label= "Precio")
+    cantidad = forms.IntegerField(label="Stock")
+    descripcion = forms.CharField(label="Descripción", max_length=250, widget=forms.Textarea)
     image = forms.ImageField()
 
 class registroUsuario(UserCreationForm):

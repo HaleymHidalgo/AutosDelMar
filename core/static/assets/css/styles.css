@@ -174,11 +174,13 @@ a{
 }
 
 .form-control{
-    color: black;
-    border-color: #1a1919;
-	margin-bottom: 10px;
-	padding-bottom: 20px;
-	position: relative;
+    color: white;
+    border-color: #454545;
+    background-color: #0000;
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+    display: grid;
 }
 
 .form-control label {

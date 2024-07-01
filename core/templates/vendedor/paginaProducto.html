@@ -2,7 +2,8 @@
 {% block content %}
 {% load static %}
 
-<section class="fondo-seccion">
+<section>
+    <h1 class="titulo-seccion">Detalles del Vehículo</h1>
     <form class="form fondo-formulario flex-column-center" method="post" action="{% url 'registroVehiculo' %}" enctype="multipart/form-data">
         {% csrf_token %}
         
@@ -11,12 +12,13 @@
             {{ field.label_tag }}
             {{ field }}
         </div>
-        {% endfor %} 
-    </form>
-    <div class="flex-row-center">
-        <button id="eliminarbtn" class="btn btn-danger" data-vehiculo-id="{{vehiculo.producto_id.producto_id}}">Eliminar Vehiculo</button>
-    </div>
-    
+        {% endfor %}
+        <img src="{{imagen}}" alt="image" class="card-img">
+        <div class="flex-row-center" style="width: 80%;">
+            <button id="editarbtn" class="btn btn-success boton">Guardar</button>
+            <button id="eliminarbtn" class="btn btn-danger boton" data-vehiculo-id="{{vehiculo.producto_id.producto_id}}">Eliminar</button>
+        </div>
+    </form>    
 </section>
 
 <script src="{% static 'assets/js/paginaProducto.js' %}"></script>

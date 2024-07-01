@@ -1,34 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Obtener el token CSRF desde la meta etiqueta
+    const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+    if (!csrfTokenMeta) {
+        console.error('CSRF token meta tag not found!');
+        return;
+    }
+    const csrfToken = csrfTokenMeta.getAttribute('content');
     const boton_eliminar = document.getElementById('eliminarbtn');
-
-    if (boton_eliminar) {
-        boton_eliminar.addEventListener('click', () => {
-            const id = boton_eliminar.getAttribute('data-vehiculo-id');
-            eliminarVehiculo(id);
-        });
-    }
-
-    function eliminarVehiculo(id) {
-        fetch(`http://localhost:8000/vendedor/eliminarProducto/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',  // Asegúrate de que csrf_token esté definido correctamente en tu template
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al eliminar vehículo');
+    boton_eliminar.addEventListener('click', async() => {
+        //obtenemos el id del vehículo a eliminar
+        id = boton_eliminar.getAttribute('data-vehiculo-id');
+        // Intentaremos enviar una petición para eliminar el vehículo
+        try {
+            const response = await fetch(`http://localhost:8000/vendedor/eliminarProducto/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            });
+            //el metodo .ok devuelve un booleano que indica si la respuesta fue correcta (status 200-299)
+            if (response.ok) {
+                console.log("Producto eliminado correctamente");
+                window.location.href = 'http://localhost:8000/vendedor/home'
+            } else {
+                // Manejar casos donde el servidor no responde con estado 204
+                console.error(`Error al eliminar producto. Código de estado: ${response.status}`);
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Vehículo eliminado correctamente:', data);
-            // Redirigir a la página de inicio después de eliminar
-            window.location.href = "http://localhost:8000/vendedor/home.html";
-        })
-        .catch(error => {
-            console.error('Error al eliminar vehículo:', error);
-        });
-    }
-});
+        } catch (error) {
+            console.error("Error de red:", error);
+        }
+    })
+})
