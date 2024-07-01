@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path
 from . import views
 
@@ -14,6 +13,7 @@ urlpatterns = [
     path('formularioContacto', views.formularioContacto, name='formularioContacto'),
     path('vendedor/home', views.v_home, name='v_home' ),
     path('vendedor/registroVehiculo',views.v_registroVehiculo, name='registroVehiculo'),
+    path('vendedor/modificarProducto/',views.modificarProducto, name='v_modificarProducto' ),
     path('vendedor/paginaProducto/<int:id>',views.v_paginaProducto, name='v_paginaProducto' ),
     path('vendedor/eliminarProducto/<int:id>',views.v_eliminarProducto, name = 'v_eliminarProducto' ),
 ]

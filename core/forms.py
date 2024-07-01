@@ -22,7 +22,6 @@ class registroVehiculo(forms.Form):
     precio = forms.IntegerField(label= "Precio")
     cantidad = forms.IntegerField(label="Stock")
     descripcion = forms.CharField(label="Descripción", max_length=250, widget=forms.Textarea)
-    image = forms.ImageField()
 
 class registroUsuario(UserCreationForm):
     class Meta:
@@ -36,16 +35,3 @@ class registroUsuario(UserCreationForm):
             'password1': 'Contraseña',
             'password2': 'Confirmar contraseña'
         }
-    
-    """
-    def __init__(self, *args, **kwargs):
-        super(registroUsuario, self).__init__(*args, **kwargs)
-        # Obtén el grupo predeterminado
-        default_group = Group.objects.get(name='cliente')
-        # Establecer el valor inicial para el campo 'groups'
-        self.fields['groups'].initial = [default_group.pk]
-        # Modificar el widget del campo 'groups' para que no permita la selección múltiple
-        self.fields['groups'].widget = forms.Select(choices=self.fields['groups'].choices)
-        # Modificar el widget del campo 'groups' para deshabilitarlo
-        self.fields['groups'].widget.attrs['disabled'] = 'disabled'
-    """

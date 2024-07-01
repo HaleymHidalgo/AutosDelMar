@@ -4,7 +4,7 @@
 
 <section>
     <h1 class="titulo-seccion">Detalles del Vehículo</h1>
-    <form class="form fondo-formulario flex-column-center" method="post" action="{% url 'registroVehiculo' %}" enctype="multipart/form-data">
+    <form class="form fondo-formulario flex-column-center" method="POST" action="{% url 'v_modificarProducto' %}" enctype="multipart/form-data">
         {% csrf_token %}
         
         {% for field in formulario %}

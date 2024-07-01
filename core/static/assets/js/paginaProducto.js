@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //el metodo .ok devuelve un booleano que indica si la respuesta fue correcta (status 200-299)
             if (response.ok) {
                 console.log("Producto eliminado correctamente");
-                window.location.href = 'http://localhost:8000/vendedor/home'
+                window.location.href = 'http://localhost:8000/vendedor/v_home'
             } else {
                 // Manejar casos donde el servidor no responde con estado 204
                 console.error(`Error al eliminar producto. Código de estado: ${response.status}`);
@@ -31,4 +31,4 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error de red:", error);
         }
     })
-})
+});
