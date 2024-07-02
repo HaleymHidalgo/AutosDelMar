@@ -31,19 +31,6 @@ class Vehiculo(models.Model):
     
     def __str__(self):
         return str(self.marca + ' ' + self.modelo)
-        
-class Venta(models.Model):
-    venta_id=models.IntegerField(primary_key=True)
-    fecha_venta=models.DateField()
-    total_venta=models.IntegerField()
-    cliente_run=models.ForeignKey( User,on_delete=models.CASCADE)
-    
-
-class Venta_Producto(models.Model):
-    venta_id=models.ForeignKey(Producto,on_delete=models.CASCADE)
-    producto_id=models.ForeignKey(Venta,on_delete=models.CASCADE)
-    cantidad_producto=models.IntegerField()
-    subtotal_producto= models.IntegerField()
 
 class Contacto (models.Model):
     nombre = models.CharField(max_length=50)
@@ -53,3 +40,12 @@ class Contacto (models.Model):
     
     def __str__(self):
             return str(self.nombre + ' ' + self.apellido)
+        
+#Tablas manejadoras de ventas
+class ordenVenta(models.Model):
+    id_orden = models.AutoField(primary_key=True)
+    
+class detalleOrden(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()
+    subtotal = models.IntegerField()

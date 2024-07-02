@@ -23,5 +23,5 @@ urlpatterns = [
     #-------- Accesorio -----
     path('vendedor/pagina_accesorio/<int:id>',views.v_paginaAccesorio, name='v_paginaAccesorio' ),
     path('vendedor/modificarAccesorio/',views.modificarAccesorio, name='v_modificarAccesorio' ),
-    path('vendedor/registroAccesorio/',views.registroAccesorio, name = 'registroAccesorio')
+    path('vendedor/registroAccesorio/', views.registroAccesorio, name='registroAccesorio'),
 ]

@@ -426,7 +426,7 @@ def registroAccesorio(request):
             'form': forms.registroAccesorio,
             'titulo': 'Accesorio',
         }
-            return render(request, 'vendedor/registroProducto.html', context)
+            return render(request, 'vendedor/registroAccesorio.html', context)
         
     
     elif request.method == 'GET':
@@ -434,7 +434,7 @@ def registroAccesorio(request):
             'form': forms.registroAccesorio,
             'titulo': 'Accesorio'
         }
-        return render(request,'vendedor/registroProducto.html', context)
+        return render(request,'vendedor/registroAccesorio.html', context)
 
 def modificarAccesorio(request):
     #Aqui actualizaremos los datos del producto

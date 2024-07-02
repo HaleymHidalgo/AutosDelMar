@@ -4,7 +4,10 @@
 <section>
     <h1 class="titulo-seccion"> Registro de {{titulo}} </h1>
 
-    <form class="form fondo-formulario flex-column-center" method="post" action="{url 'registroProducto'}" enctype="multipart/form-data">
+    <form class="form fondo-formulario flex-column-center"
+            method="post" 
+            action="{% url 'registroAccesorio' %}"
+            enctype="multipart/form-data">
 
         {% csrf_token %}
 

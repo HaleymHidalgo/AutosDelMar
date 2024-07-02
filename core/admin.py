@@ -5,6 +5,6 @@ from . import models
 admin.site.register(models.Producto)
 admin.site.register(models.Accesorio)
 admin.site.register(models.Vehiculo)
-admin.site.register(models.Venta)
-admin.site.register(models.Venta_Producto)
 admin.site.register(models.Contacto)
+admin.site.register(models.detalleOrden)
+admin.site.register(models.ordenVenta)
