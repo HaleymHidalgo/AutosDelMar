@@ -4,9 +4,9 @@
 
 <section>
     <div class="flex-column-center fondo-formulario mt-5">
-        <img src="{% static '/assets/img/isotipo-autos-del-mar.png' %}" alt="">
+        <img src="{% static 'assets/img/isotipo-autos-del-mar.png' %}" alt="">
         <div class="container">
-            <form class="form" method="POST" action="{% url 'registroUsuario' %}">
+            <form class="form" method="POST" action="{% url 'registroUsuario' %}" id="registroformulario">
                 {% csrf_token %}
 
                 {% for field in form %}
@@ -16,13 +16,13 @@
                 </div>
                 {% endfor %}
 
-                <p style="color: red;">{{ error }}</p>
-                <button>Confirmar</button>
+                <p style="color: red;" id="error">{{ error }}</p>
+                <button type="submit">Confirmar</button>
             </form>
         </div>
-
-
     </div>
 </section>
+
+<script src="{% static 'assets/js/validaciones/registro.js' %}"></script>
 
 {% endblock %}
