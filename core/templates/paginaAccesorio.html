@@ -41,7 +41,7 @@
         <h3 id="precioProd">Precio: ${{accesorio.producto_id.precio}}</h3>
         <h3 id="stockProd">Nr°Stock: {{accesorio.producto_id.cantidad}}</h3>
     </div>
-    <form action="{% url 'agregar_al_carrito' %}" class="form-control flex-column-center">
+    <form action="#" class="form-control flex-column-center">
         <label for="cantidad">Cantidad Producto</label>
         <input type="number" name="cantidad" id="cantidadProducto" min="1" value="1">
         <input type="hidden" name="idProducto" id="idProducto" value="{{accesorio.producto_id.producto_id}}">
