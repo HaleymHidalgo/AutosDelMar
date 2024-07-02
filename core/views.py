@@ -91,6 +91,7 @@ def catalogo(request):
     else:
         return HttpResponse("idkmen")
     
+@csrf_exempt
 def registroUsuario(request):
     if(request.user.is_authenticated):
         return redirect('home')
