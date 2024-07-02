@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from PIL import Image
 import os
 from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 #----------------------- Cliente -----------------------
 def home(request):
@@ -90,6 +91,7 @@ def catalogo(request):
     else:
         return HttpResponse("idkmen")
     
+@csrf_exempt
 def registroUsuario(request):
     if(request.user.is_authenticated):
         return redirect('home')
