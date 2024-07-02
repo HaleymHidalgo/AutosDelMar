@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from . import models, forms
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from PIL import Image
 import os
 from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 #----------------------- Cliente -----------------------
 def home(request):
@@ -486,3 +487,20 @@ def modificarAccesorio(request):
 def cerrar_sesion(request):
     logout(request)
     return redirect('home')
+
+#---- Orden de Venta -----
+"""
+def agregar_al_carrito(request, producto_id):
+    producto = get_object_or_404(models.Producto, pk=producto_id)
+    orden, created = models.OrdenCompra.objects.get_or_create(usuario=request.user, completada=False)
+    item, created = models.DetalleOrden.objects.get_or_create(orden=orden, producto=producto)
+    
+    
+    return redirect('detalle_del_carrito')  # Redirecciona a la vista del carrito
+
+def detalle_del_carrito(request):
+    orden, created = models.ordenCompra.objects.get_or_create(usuario=request.user, completada=False)
+    items = orden.items.all()
+    total = sum(item.producto.precio * item.cantidad for item in items)
+    return render(request, 'carrito/detalle_carrito.html', {'orden': orden, 'items': items, 'total': total})
+"""
