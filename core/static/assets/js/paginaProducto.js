@@ -3,11 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
     // Obtener el token CSRF desde la meta etiqueta
     const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
-    if (!csrfTokenMeta) {
-        console.error('CSRF token meta tag not found!');
-        return;
-    }
+        if (!csrfTokenMeta) {
+            console.error('CSRF token meta tag not found!');
+            return;
+        }
     const csrfToken = csrfTokenMeta.getAttribute('content');
+
     const boton_eliminar = document.getElementById('eliminarbtn');
     boton_eliminar.addEventListener('click', async() => {
         //obtenemos el id del vehículo a eliminar

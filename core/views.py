@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from PIL import Image
 import os
 from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 #----------------------- Cliente -----------------------
 def home(request):
