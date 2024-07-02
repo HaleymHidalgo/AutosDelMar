@@ -1,0 +1,33 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+{% load static %}
+
+<section>
+    <h1 class="titulo-seccion">Detalles del Vehículo</h1>
+    <form class="form fondo-formulario flex-column-center" method="POST" action="{% url 'v_modificarAccesorio' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% for field in formulario %}
+        <div class="form-control">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+        {% endfor %}
+        <div class="form-control">
+            <label for="imgProducto">Imagen del Vehículo:</label>
+            <img src="{{hiddenImagen}}" alt="image" class="card-img" name="imgProductoOld">
+            <input type="file" name="imgProducto" id="imgProducto">
+        </div>
+        <div style="display: none;">
+            <input type="hidden" name="imgProductoOld" value="{{hiddenImagen}}">
+            <input type="hidden" name="idProducto" value="{{hiddenId}}" id="hiddenId">
+        </div>
+        <div class="flex-row-center" style="width: 80%;">
+            <button id="editarbtn" class="btn btn-success boton">Guardar</button>
+            <button id="eliminarbtn" class="btn btn-danger boton" type="button">Eliminar</button>
+        </div>
+    </form>    
+</section>
+
+<script src="{% static 'assets/js/paginaProducto.js' %}"></script>
+{% endblock %}

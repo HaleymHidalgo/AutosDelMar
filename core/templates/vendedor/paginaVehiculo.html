@@ -4,7 +4,7 @@
 
 <section>
     <h1 class="titulo-seccion">Detalles del Vehículo</h1>
-    <form class="form fondo-formulario flex-column-center" method="POST" action="{% url 'v_modificarProducto' %}" enctype="multipart/form-data">
+    <form class="form fondo-formulario flex-column-center" method="POST" action="{% url 'v_modificarVehiculo' %}" enctype="multipart/form-data">
         {% csrf_token %}
         
         {% for field in formulario %}
@@ -14,9 +14,9 @@
         </div>
         {% endfor %}
         <div class="form-control">
-            <label for="imgProducto">Imagen del Vehículo</label>
+            <label for="imgProducto">Imagen del Vehículo:</label>
+            <img src="{{hiddenImagen}}" alt="image" class="card-img" name="imgProductoOld">
             <input type="file" name="imgProducto" id="imgProducto">
-            <img src="{{hiddenImagen}}" alt="image" class="card-img">
         </div>
         <div style="display: none;">
             <input type="hidden" name="imgProductoOld" value="{{hiddenImagen}}">

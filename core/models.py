@@ -12,7 +12,7 @@ class Producto(models.Model):
     def __str__(self):
         return str(self.producto_id)
     
-class Accesorios(models.Model):
+class Accesorio(models.Model):
     producto_id=models.ForeignKey(Producto,on_delete=models.CASCADE)
     nombre=models.CharField(max_length=100)
     distribuidor=models.CharField(max_length=100)

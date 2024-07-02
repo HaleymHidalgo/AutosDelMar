@@ -17,11 +17,19 @@ class registroVehiculo(forms.Form):
     modelo = forms.CharField(label= "Modelo:",max_length=30)
     carroceria = forms.CharField(label= "Carrocería",max_length=30)
     combustible = forms.CharField(label= "Tipo de Combustible",max_length=30)
-    anio = forms.IntegerField(label= "Año del vehículo")
+    anio = forms.IntegerField(label= "Año del vehículo", min_value=1000)
     transmision = forms.CharField(label= "Transmisión",max_length=30)
-    precio = forms.IntegerField(label= "Precio")
-    cantidad = forms.IntegerField(label="Stock")
+    precio = forms.IntegerField(label= "Precio", min_value=0)
+    cantidad = forms.IntegerField(label="Stock", min_value=0)
     descripcion = forms.CharField(label="Descripción", max_length=250, widget=forms.Textarea)
+
+class registroAccesorio(forms.Form):
+    nombre = forms.CharField(label="Nombre descriptivo del accesorio:", max_length=50)
+    distribuidor = forms.CharField(label="Distribuidor:", max_length=50)
+    precio=forms.IntegerField(label="Precio:", min_value=0)
+    cantidad = forms.IntegerField(label="Stock", min_value=0)
+    descripcion = forms.CharField(label="Descripción", max_length=250, widget=forms.Textarea)
+
 
 class registroUsuario(UserCreationForm):
     class Meta:

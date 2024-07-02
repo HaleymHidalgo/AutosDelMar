@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <!-- Aqui deberian haber botones de filtrado -->
         <div id="rowCards" class="row fondo-seccion">
-            <!-- Aqui van las cards del catalogo -->
+            <!-- Aqui se añaden las cards -->
             {% for vehiculo in vehiculos %}
             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12 flex-row-center">
                 <div class="card">
@@ -17,13 +17,28 @@
                     <div class="card-body">
                         <h5 class="card-title">{{vehiculo.modelo}}</h5>
                         <p>{{vehiculo.marca}}</p>
-                        <a href="{% url 'paginaProducto' vehiculo.producto_id.producto_id %}">
+                        <a href="{% url 'paginaVehiculo' vehiculo.producto_id.producto_id %}">
                             <button id="btnAdd" class="boton btn btn-info">Ver Producto</button>
                         </a>
                     </div>
                 </div>
             </div>
+            {% endfor %}
 
+            <!-- Aqui se añaden las cards de accesorios -->
+            {% for accesorio in accesorios %}
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12 flex-row-center">
+                <div class="card">
+                    <img src="{{ accesorio.producto_id.image }}" class="card-img" alt="{{ accesorio.nombre }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ accesorio.nombre }}</h5>
+                        <p>{{ accesorio.distribuidor }}</p>
+                        <a href="{% url 'paginaAccesorio' accesorio.producto_id.producto_id %}">
+                            <button id="btnAdd" class="boton btn btn-info">Ver Producto</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
         </div>
     </div>
