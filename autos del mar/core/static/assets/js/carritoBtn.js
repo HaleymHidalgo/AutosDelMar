@@ -4,6 +4,7 @@ btnLimpiar.addEventListener('click', () => {
     localStorage.removeItem('carritoCompra');
 });
 
+
 //funcion eliminar producto
 const btnEliminarList = document.querySelectorAll('.btnEliminar');
 
@@ -22,16 +23,3 @@ const btnEliminarList = document.querySelectorAll('.btnEliminar');
             console.log(nuevoCarrito);
     })
 });
-
-
-// Función para mostrar los productos del localStorage en el carrito
-const mostrarProductosCarrito = () => {
-    const carrito = JSON.parse(localStorage.getItem('carritoCompra'));
-
-    carrito.forEach(producto => {
-        
-    });
-};
-
-// Llama a esta función cuando se cargue la página para mostrar los productos del localStorage
-mostrarProductosCarrito();

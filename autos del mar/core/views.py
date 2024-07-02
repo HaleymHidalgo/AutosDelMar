@@ -7,6 +7,7 @@ import ssl
 import smtplib
 from email.message import EmailMessage
 from django.conf import settings
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
@@ -137,21 +138,7 @@ def formularioContacto (request):
         return render(request, 'paginaProducto.html', {'form': forms.formularioContacto})
 
 #carrito
-    productos = {  }
-    for producto in 50:
-        producto.append(producto)
-
-    context = {
-        'productos': productos
-    }   
-
-    productos = Producto.objects.all()
-    total = sum(producto.precio for producto in productos)
-    context = {
-        'productos': productos,
-        'total': total,
-    }
-    return render(request, 'carrito.html', context)
+    
 #vendedor
 def v_home(request):
     if request.method == 'GET':

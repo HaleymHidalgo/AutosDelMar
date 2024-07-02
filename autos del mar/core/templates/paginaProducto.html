@@ -6,7 +6,8 @@
     <div id="carouselExample" class="carousel slide">
         <div class="carousel-inner" id="carouselContenedor">
             <div class="carousel-item active">
-                <img class="d-block img-carrucel w-50 mx-auto" 
+                <img class="d-block img-carrucel w-50 mx-auto"
+                    id="imagenProducto" 
                     src="{{ vehiculo.producto_id.image.url}}" 
                     alt="{{vehiculo.modelo}}" 
                     style="background-color: white;">
@@ -49,7 +50,7 @@
     </div>
 
     <p class="parrafo-seccion" id="descripcionProd">{{vehiculo.producto_id.descripcion}}</p>
-    <p style="display: none;" id="idProducto">{{vehiculo.producto_id}}</p>
+    <input type="hidden" id="idProducto" value="{{vehiculo.producto_id.producto_id}}"></input>
     <div id="info-producto" class="flex-row-center justify-content-around texto-azul">
         <h3 id="precioProd">Precio: ${{vehiculo.producto_id.precio}}</h3>
         <h3 id="stockProd">Nr°Stock: {{vehiculo.producto_id.cantidad}}</h3>
