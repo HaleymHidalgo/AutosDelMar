@@ -1,4 +1,5 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
 {% block content %}
 <!-- Carousel Section -->
 <section class="container-max section-carrusel">
@@ -78,7 +79,7 @@
     <div class="flex-column-center fondo-formulario mt-5">
         <div class="container">
             <h3 class="titulo-seccion">Formulario de Contacto</h3>
-            <form class="form" method="POST" action="{% url 'formularioContacto' %}">
+            <form id="formContacto" class="form" method="POST" action="{% url 'formularioContacto' %}">
                 {% csrf_token %}
 
                 {% for field in formulario%}
@@ -88,7 +89,7 @@
                 </div>
                 {% endfor %}
                 
-                <p style="color: red;">{{ error }}</p>
+                <p id="errorContacto" style="color: red;">{{ error }}</p>
                 
                 <div id="productos">
                     <div class="flex-column-center">
@@ -99,4 +100,5 @@
         </div>
     </div>
 </section>
+<script src="{% static 'assets/js/validacionesContacto.js' %}"></script>
 {% endblock %}
