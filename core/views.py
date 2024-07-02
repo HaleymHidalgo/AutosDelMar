@@ -38,7 +38,13 @@ def home(request):
 
 @login_required(login_url='acceso_usuario')
 def carrito(request):
-    return render(request, 'carrito.html')
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            username = request.user.username
+            detalles = models.DetalleOrden.objects.filter(orden__cliente__username = username) #Añadir columna 'completada'
+            #Falta añadir un context con los vehiculos y accesorios para recorrer
+            return render(request, 'carrito.html', {'detalles':detalles})
+    redirect('home')
 
 def nosotros(request):
     if(request.user.is_authenticated):
@@ -493,31 +499,43 @@ def cerrar_sesion(request):
 
 #---- Orden de Venta -----
 
-def agregar_al_carrito(request, producto_id):
-    #Obtenemos los datos para generar la orden de compra
-    idUser = request.POST.get('idUser')
-    idProducto = request.POST.get('idProducto')
-    cantidad = request.POST.get('cantidad')
-    
-    #---- Generar orden y detalle de compra -----
-    
-    #Obtenemos los datos del producto
-    producto = get_object_or_404(models.Producto, pk=producto_id)
-    
-    #Obtenemos los datos del cliente
-    #cliente = get_object_or_404(models.Cliente, pk=idUser)
-    
-    #obtenemos la orden de compra o la crea si no existe
-    orden, newOrden = models.OrdenCompra.objects.get_or_create(usuario=idUser, completada=False)
-    
-    #Añadimos el producto a la orden de compra
-    newDetalle = models.DetalleOrden.objects.create(
-        orden=newOrden,
-        producto=idProducto,
-        cantidad=cantidad,
-        subtotal=producto.precio*cantidad)
-    
-    return redirect('v_home')  # Redirecciona a la vista del carrito
+def agregar_al_carrito(request):
+    if request.method == 'POST':
+        try:
+            # Obtenemos los datos para generar la orden de compra
+            idUser = request.POST.get('idUser')
+            idProducto = request.POST.get('idProducto')
+            cantidad = int(request.POST.get('cantidad'))
+            
+            # ---- Generar orden y detalle de compra -----
+
+            # Obtenemos los datos del producto
+            producto = get_object_or_404(models.Producto, producto_id=idProducto)
+
+            # Obtenemos los datos del cliente
+            cliente = get_object_or_404(User, username=idUser)
+            
+            # Obtenemos la orden de compra del cliente, si existe
+            orden, created = models.OrdenCompra.objects.get_or_create(cliente=cliente)
+
+            #Calculamos el subtotal del detalle
+            subtotal = producto.precio * cantidad
+
+            # Añadimos el producto a la orden de compra
+            newDetalle = models.DetalleOrden.objects.create(
+                orden=orden,
+                producto=producto,
+                cantidad=cantidad,
+                subtotal=producto.precio * cantidad
+            )
+
+            print(newDetalle)
+            
+            # Redireccionamos a la vista del carrito o a donde sea necesario
+            return redirect('home')  # Asegúrate de que 'home' sea el nombre correcto de tu vista
+        except Exception as e:
+            print(f"Error en agregar_al_carrito: {str(e)}")
+            return HttpResponse("Hubo un error al procesar la solicitud.", status=500)
 
 """
 def detalle_del_carrito(request):

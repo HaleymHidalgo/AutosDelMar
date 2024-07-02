@@ -42,18 +42,22 @@ class Contacto (models.Model):
             return str(self.nombre + ' ' + self.apellido)
         
 #Tablas manejadoras de ventas
-"""
+
 class OrdenCompra(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     fechaOrden = models.DateField(auto_now_add=True)
     completada = models.BooleanField(default=False)
+
+    def __str__(self):
+            return str(self.cliente.username)
     
 class DetalleOrden(models.Model):
     orden = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
     subtotal = models.IntegerField()
-    
+
+"""
 class Factura(models.Model):
     orden = models.OneToOneField(OrdenCompra, on_delete=models.CASCADE)
     fecha_emision = models.DateTimeField(auto_now_add=True)

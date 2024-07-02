@@ -25,5 +25,5 @@ urlpatterns = [
     path('vendedor/modificarAccesorio/',views.modificarAccesorio, name='v_modificarAccesorio' ),
     path('vendedor/registroAccesorio/', views.registroAccesorio, name='registroAccesorio'),
     #------- Orden de Venta -----
-    #path('vendedor/agregar_al_carrito/', views.agregar_al_carrito, name='agregar_al_carrito'),
+    path('agregar_al_carrito/', views.agregar_al_carrito, name='agregarCarrito'),
 ]
