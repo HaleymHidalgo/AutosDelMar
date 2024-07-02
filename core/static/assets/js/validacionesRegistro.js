@@ -39,7 +39,7 @@ function checkInputsRegistro() {
         setErrorFor(rut, 'Rut necesario');
         valid = false;
     } else if (!isRut(rutValue)){
-        setErrorFor(rut, 'No ingresó un rut válido ej:(99.999.999-k)');
+        setErrorFor(rut, 'No ingresó un rut válido ej: (12897098-k)');
         valid = false;
     } else {
         setSuccessFor(rut);
@@ -80,9 +80,9 @@ function checkInputsRegistro() {
 
 function setErrorFor(input, message) {
     const formControl = input.parentElement;
-    const small = formControl.querySelector('small');
     formControl.className = 'form-control error';
-    small.innerText = message;
+	const errorMessage = document.getElementById('errorRegistro');
+	errorMessage.innerText = message;
 }
 
 function setSuccessFor(input) {
@@ -95,5 +95,6 @@ function isEmail(email) {
 }
 
 function isRut(rut) {
-    return /^(\d{1,2}(?:[\.]?\d{3}){2}-[\dkK])$/.test(rut);
+    return /^(\d{1,2}\d{3}\d{3}-[\dkK])$/.test(rut);
 }
+
