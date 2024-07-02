@@ -350,10 +350,11 @@ def modificarProducto(request):
             print(f'Error al crear producto: {e}')
             #Modificar para que no se pierdan los datos <---
             return render(request, 'vendedor/v_home')
-
+@csrf_exempt
 @login_required(login_url='acceso_usuario')
 def v_eliminarProducto(request, id):
-    if request.method == 'DELETE':
+    if request.method == 'POST':
+        print("hoy se coje")
         try:
             producto = get_object_or_404(models.Producto, producto_id=id)
             producto.delete()

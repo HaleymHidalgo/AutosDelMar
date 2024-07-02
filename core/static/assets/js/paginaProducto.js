@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Intentaremos enviar una petición para eliminar el vehículo
         try {
             const response = await fetch(`http://localhost:8000/vendedor/eliminarProducto/${id}`, {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     'X-CSRFToken': csrfToken,
                     'Content-Type': 'application/json'
