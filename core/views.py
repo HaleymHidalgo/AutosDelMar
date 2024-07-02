@@ -370,6 +370,8 @@ def v_eliminarProducto(request, id):
 def v_paginaAccesorio(request, id):
     #Aqui nosotros obtenemos el producto que queremos mostrar
     if request.method == 'GET':
+        
+        user = request.user.id
         accesorio = models.Accesorio.objects.get(producto_id=id)
 
         llenar_datos ={
@@ -385,7 +387,8 @@ def v_paginaAccesorio(request, id):
             'formulario': form,
             'titulo':'Detalles del Accesorio',
             'hiddenImagen':accesorio.producto_id.image,
-            'hiddenId':accesorio.producto_id.producto_id
+            'hiddenId':accesorio.producto_id.producto_id,
+            'hidenUser':user
         }
         return render(request, 'vendedor/paginaAccesorio.html', context)
 
@@ -489,15 +492,34 @@ def cerrar_sesion(request):
     return redirect('home')
 
 #---- Orden de Venta -----
-"""
-def agregar_al_carrito(request, producto_id):
-    producto = get_object_or_404(models.Producto, pk=producto_id)
-    orden, created = models.OrdenCompra.objects.get_or_create(usuario=request.user, completada=False)
-    item, created = models.DetalleOrden.objects.get_or_create(orden=orden, producto=producto)
-    
-    
-    return redirect('detalle_del_carrito')  # Redirecciona a la vista del carrito
 
+def agregar_al_carrito(request, producto_id):
+    #Obtenemos los datos para generar la orden de compra
+    idUser = request.POST.get('idUser')
+    idProducto = request.POST.get('idProducto')
+    cantidad = request.POST.get('cantidad')
+    
+    #---- Generar orden y detalle de compra -----
+    
+    #Obtenemos los datos del producto
+    producto = get_object_or_404(models.Producto, pk=producto_id)
+    
+    #Obtenemos los datos del cliente
+    #cliente = get_object_or_404(models.Cliente, pk=idUser)
+    
+    #obtenemos la orden de compra o la crea si no existe
+    orden, newOrden = models.OrdenCompra.objects.get_or_create(usuario=idUser, completada=False)
+    
+    #Añadimos el producto a la orden de compra
+    newDetalle = models.DetalleOrden.objects.create(
+        orden=newOrden,
+        producto=idProducto,
+        cantidad=cantidad,
+        subtotal=producto.precio*cantidad)
+    
+    return redirect('v_home')  # Redirecciona a la vista del carrito
+
+"""
 def detalle_del_carrito(request):
     orden, created = models.ordenCompra.objects.get_or_create(usuario=request.user, completada=False)
     items = orden.items.all()
