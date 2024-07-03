@@ -40,10 +40,33 @@ def home(request):
 def carrito(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
+            
             username = request.user.username
-            detalles = models.DetalleOrden.objects.filter(orden__cliente__username = username) #Añadir columna 'completada'
+            orden = orden, created = models.OrdenCompra.objects.get_or_create(cliente__username=username, completada=False)
+            detalles = models.DetalleOrden.objects.filter(orden__cliente__username = username) 
+            
+            accesorios = []
+            for item in detalles:
+                accesorio = models.Accesorio.objects.get(producto_id=item.producto.producto_id)
+                accesorios.append({
+                    'imagen': accesorio.producto_id.image,
+                    'nombre': accesorio.nombre,
+                    'precio': accesorio.producto_id.precio,
+                    'cantidad': item.cantidad,
+                    'subtotal': item.subtotal
+                })
+            
             #Falta añadir un context con los vehiculos y accesorios para recorrer
-            return render(request, 'carrito.html', {'detalles':detalles})
+            total = sum(item.producto.precio * item.cantidad for item in detalles)
+            
+            context = {
+                'orden': orden,
+                'productos':accesorios,
+                'total':total
+            }
+            
+            return render(request, 'carrito.html', context)        
+        
     redirect('home')
 
 def nosotros(request):

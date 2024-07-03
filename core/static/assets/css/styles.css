@@ -265,10 +265,16 @@ a{
 .imgCarrito{
     border-radius: 25px;
     background-color: white;
-    aspect-ratio: 16/9;
     height: 100%;
 }
 
 aside{
     padding: 0px;
+}
+
+.img-carrito{
+    max-width: 300px !important;
+    background-color: white;
+    box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.6);
+    border-radius: 25px;
 }
