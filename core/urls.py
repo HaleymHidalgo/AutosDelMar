@@ -13,6 +13,7 @@ urlpatterns = [
     path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
     path('acceso_usuario/', views.acceso_usuario, name='acceso_usuario'),
     path('formularioContacto/', views.formularioContacto, name='formularioContacto'),
+    path('perfil/', views.perfil , name ='perfil' ),
     #------- Vendedor -----
     path('vendedor/home', views.v_home, name='v_home' ),
     path('vendedor/eliminarProducto/<int:id>',views.v_eliminarProducto, name = 'v_eliminarProducto' ),
@@ -25,5 +26,7 @@ urlpatterns = [
     path('vendedor/modificarAccesorio/',views.modificarAccesorio, name='v_modificarAccesorio' ),
     path('vendedor/registroAccesorio/', views.registroAccesorio, name='registroAccesorio'),
     #------- Orden de Venta -----
-    #path('vendedor/agregar_al_carrito/', views.agregar_al_carrito, name='agregar_al_carrito'),
+    path('agregar_al_carrito/', views.agregar_al_carrito, name='agregarCarrito'),
+    path('eliminar_de_carrito/', views.eliminar_de_carrito, name='elimar_de_carrito'),
+    path('facturar/', views.facturar, name='facturar'),
 ]

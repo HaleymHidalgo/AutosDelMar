@@ -30,7 +30,7 @@ class Vehiculo(models.Model):
     transmision=models.CharField(max_length=50)
     
     def __str__(self):
-        return str(self.marca + ' ' + self.modelo)
+        return str(self.marca + ' - ' + self.modelo)
 
 class Contacto (models.Model):
     nombre = models.CharField(max_length=50)
@@ -42,11 +42,16 @@ class Contacto (models.Model):
             return str(self.nombre + ' ' + self.apellido)
         
 #Tablas manejadoras de ventas
-"""
+
 class OrdenCompra(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     fechaOrden = models.DateField(auto_now_add=True)
     completada = models.BooleanField(default=False)
+
+    def __str__(self):
+            return (f"Orden ID: {self.pk}  -  "
+                    f"Cliente: {self.cliente.username}  -  "
+                    f"Fecha: {self.fechaOrden}")
     
 class DetalleOrden(models.Model):
     orden = models.ForeignKey(OrdenCompra, on_delete=models.CASCADE)
@@ -54,9 +59,13 @@ class DetalleOrden(models.Model):
     cantidad = models.IntegerField()
     subtotal = models.IntegerField()
     
+    def __str__(self):
+        return (f"Cliente: {self.orden.cliente.username}  -  "
+                f"Orden ID: {self.orden.pk}  -  "
+                f"Producto ID: {self.producto.producto_id}")
+        
 class Factura(models.Model):
     orden = models.OneToOneField(OrdenCompra, on_delete=models.CASCADE)
     fecha_emision = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     # Otros campos como detalles de pago, etc.
-"""

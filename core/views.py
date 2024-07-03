@@ -38,7 +38,42 @@ def home(request):
 
 @login_required(login_url='acceso_usuario')
 def carrito(request):
-    return render(request, 'carrito.html')
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            
+            user = request.user
+            
+            # Obtener o crear la orden de compra para el usuario actual
+            orden, created = models.OrdenCompra.objects.get_or_create(cliente=user, completada=False)
+            
+            # Filtrar los detalles de la orden específica
+            detalles = models.DetalleOrden.objects.filter(orden=orden)
+            
+            # Lista para almacenar los accesorios relacionados
+            accesorios = []
+            for item in detalles:
+                accesorio = models.Accesorio.objects.get(producto_id=item.producto.producto_id)
+                accesorios.append({
+                    'idDetalle': item.pk,
+                    'imagen': accesorio.producto_id.image,
+                    'nombre': accesorio.nombre,
+                    'precio': accesorio.producto_id.precio,
+                    'cantidad': item.cantidad,
+                    'subtotal': item.producto.precio * item.cantidad
+                })
+            
+            #Falta añadir un context con los vehiculos y accesorios para recorrer
+            total = sum(item.producto.precio * item.cantidad for item in detalles)
+            
+            context = {
+                'orden': orden,
+                'productos':accesorios,
+                'total':total
+            }
+            
+            return render(request, 'carrito.html', context)        
+        
+    redirect('home')
 
 def nosotros(request):
     if(request.user.is_authenticated):
@@ -91,6 +126,7 @@ def catalogo(request):
     else:
         return HttpResponse("idkmen")
     
+@csrf_exempt
 def registroUsuario(request):
     if(request.user.is_authenticated):
         return redirect('home')
@@ -208,6 +244,18 @@ def formularioContacto (request):
         
     else:
         return render(request, 'paginaProducto.html', {'form': forms.formularioContacto})
+
+def perfil(request):
+        if request.method == 'GET':
+            #Aqui nosotros obtenemos el usuario logeado
+            usuario = request.user
+            context = {
+                'usuario': usuario
+            }
+            #le vamos a pasarle el contexto a la plantilla
+            return render(request, 'perfil.html', context)
+        else:
+            return redirect('home')
 
 #------------------------- Vendedor -------------------------
 @login_required(login_url='acceso_usuario')
@@ -370,6 +418,8 @@ def v_eliminarProducto(request, id):
 def v_paginaAccesorio(request, id):
     #Aqui nosotros obtenemos el producto que queremos mostrar
     if request.method == 'GET':
+        
+        user = request.user.id
         accesorio = models.Accesorio.objects.get(producto_id=id)
 
         llenar_datos ={
@@ -385,7 +435,8 @@ def v_paginaAccesorio(request, id):
             'formulario': form,
             'titulo':'Detalles del Accesorio',
             'hiddenImagen':accesorio.producto_id.image,
-            'hiddenId':accesorio.producto_id.producto_id
+            'hiddenId':accesorio.producto_id.producto_id,
+            'hidenUser':user
         }
         return render(request, 'vendedor/paginaAccesorio.html', context)
 
@@ -489,18 +540,94 @@ def cerrar_sesion(request):
     return redirect('home')
 
 #---- Orden de Venta -----
-"""
-def agregar_al_carrito(request, producto_id):
-    producto = get_object_or_404(models.Producto, pk=producto_id)
-    orden, created = models.OrdenCompra.objects.get_or_create(usuario=request.user, completada=False)
-    item, created = models.DetalleOrden.objects.get_or_create(orden=orden, producto=producto)
-    
-    
-    return redirect('detalle_del_carrito')  # Redirecciona a la vista del carrito
 
-def detalle_del_carrito(request):
-    orden, created = models.ordenCompra.objects.get_or_create(usuario=request.user, completada=False)
-    items = orden.items.all()
-    total = sum(item.producto.precio * item.cantidad for item in items)
-    return render(request, 'carrito/detalle_carrito.html', {'orden': orden, 'items': items, 'total': total})
-"""
+@login_required(login_url='acceso_usuario')
+def agregar_al_carrito(request):
+    if request.method == 'POST':
+        try:
+            # Obtenemos los datos para generar la orden de compra
+            cliente = request.user
+            idProducto = request.POST.get('idProducto')
+            cantidad = int(request.POST.get('cantidad'))
+            
+            # ---- Generar orden y detalle de compra -----
+
+            # Obtenemos los datos del producto
+            producto = get_object_or_404(models.Producto, producto_id=idProducto)
+            print(producto)
+            
+            # Obtenemos la orden de compra del cliente, si existe
+            orden, created = models.OrdenCompra.objects.get_or_create(cliente=cliente, completada=False)
+
+            #Calculamos el subtotal del detalle
+            subtotal = producto.precio * cantidad
+
+            # Añadimos el producto a la orden de compra
+            models.DetalleOrden.objects.create(
+                orden=orden,
+                producto=producto,
+                cantidad=cantidad,
+                subtotal=producto.precio * cantidad
+            )
+            
+            # Redireccionamos a la vista del carrito o a donde sea necesario
+            return redirect('home')  # Asegúrate de que 'home' sea el nombre correcto de tu vista
+        except Exception as e:
+            print(f"Error en agregar_al_carrito: {str(e)}")
+            return HttpResponse("Hubo un error al procesar la solicitud.", status=500)
+
+@login_required(login_url='acceso_usuario')
+def facturar(request):
+    try:
+        # Obtenemos el nombre de usuario del usuario actual
+        username = request.user.username
+        
+        # Obtener la orden de compra para el usuario actual que aún no está completada
+        orden = models.OrdenCompra.objects.get(cliente__username=username, completada=False)
+        
+        # Obtener los detalles de la orden
+        detalles = models.DetalleOrden.objects.filter(orden=orden)
+
+        # Calcular el total de la factura
+        total = sum(item.producto.precio * item.cantidad for item in detalles)
+
+        # Generar la factura
+        try:
+            factura = models.Factura.objects.create(
+                orden=orden,
+                total=total
+            )
+            
+            # Marcar la orden como completada
+            orden.completada = True
+            orden.save()
+            
+            return redirect('home')
+        
+        except Exception as e:
+            # Imprimir el error para depuración
+            print(f"Error al crear la factura: {e}")
+            return HttpResponse('Bad Request 2')
+    
+    except models.OrdenCompra.DoesNotExist:
+        return HttpResponse('No Order Found')
+    
+    except Exception as e:
+        # Imprimir el error para depuración
+        print(f"Error al procesar la facturación: {e}")
+        return HttpResponse('Bad Request')
+
+@login_required(login_url='acceso_usuario')
+def eliminar_de_carrito(request):
+    try:
+        # Obtenemos los datos para eliminar el detalle de la orden
+        idDetalle = request.POST.get('idDetalle')
+        # Obtenemos los datos del detalle
+        detalle = get_object_or_404(models.DetalleOrden, pk=idDetalle)
+        # Eliminar el detalle de la orden
+        detalle.delete()
+        # Redireccionamos a la vista del carrito o a donde sea necesario
+        return redirect('carrito')
+    except Exception as e:
+        print(f"Error en eliminar_de_carrito: {str(e)}")
+        return HttpResponse("Hubo un error al procesar la solicitud.", status=500)
