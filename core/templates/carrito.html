@@ -22,7 +22,9 @@
         <article class="precio-background flex-column-center texto-blanco">
             <h3>Total a Pagar</h2>
             <p id="precioTotal">${{total}}</p>
-            <button id="btnComprar" class="btn btn-primary boton">Comprar</button>
+            <form action="{% url 'facturar' %}">
+                <button id="btnComprar" class="btn btn-success boton">Comprar</button>
+            </form>
         </article>
     </aside>
 </div>

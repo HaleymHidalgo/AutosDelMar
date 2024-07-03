@@ -41,10 +41,15 @@ def carrito(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             
-            username = request.user.username
-            orden = orden, created = models.OrdenCompra.objects.get_or_create(cliente__username=username, completada=False)
-            detalles = models.DetalleOrden.objects.filter(orden__cliente__username = username) 
+            user = request.user
             
+            # Obtener o crear la orden de compra para el usuario actual
+            orden, created = models.OrdenCompra.objects.get_or_create(cliente=user, completada=False)
+            
+            # Filtrar los detalles de la orden específica
+            detalles = models.DetalleOrden.objects.filter(orden=orden)
+            
+            # Lista para almacenar los accesorios relacionados
             accesorios = []
             for item in detalles:
                 accesorio = models.Accesorio.objects.get(producto_id=item.producto.producto_id)
@@ -53,7 +58,7 @@ def carrito(request):
                     'nombre': accesorio.nombre,
                     'precio': accesorio.producto_id.precio,
                     'cantidad': item.cantidad,
-                    'subtotal': item.subtotal
+                    'subtotal': item.producto.precio * item.cantidad
                 })
             
             #Falta añadir un context con los vehiculos y accesorios para recorrer
@@ -522,11 +527,12 @@ def cerrar_sesion(request):
 
 #---- Orden de Venta -----
 
+@login_required(login_url='acceso_usuario')
 def agregar_al_carrito(request):
     if request.method == 'POST':
         try:
             # Obtenemos los datos para generar la orden de compra
-            idUser = request.POST.get('idUser')
+            cliente = request.user
             idProducto = request.POST.get('idProducto')
             cantidad = int(request.POST.get('cantidad'))
             
@@ -534,25 +540,21 @@ def agregar_al_carrito(request):
 
             # Obtenemos los datos del producto
             producto = get_object_or_404(models.Producto, producto_id=idProducto)
-
-            # Obtenemos los datos del cliente
-            cliente = get_object_or_404(User, username=idUser)
+            print(producto)
             
             # Obtenemos la orden de compra del cliente, si existe
-            orden, created = models.OrdenCompra.objects.get_or_create(cliente=cliente)
+            orden, created = models.OrdenCompra.objects.get_or_create(cliente=cliente, completada=False)
 
             #Calculamos el subtotal del detalle
             subtotal = producto.precio * cantidad
 
             # Añadimos el producto a la orden de compra
-            newDetalle = models.DetalleOrden.objects.create(
+            models.DetalleOrden.objects.create(
                 orden=orden,
                 producto=producto,
                 cantidad=cantidad,
                 subtotal=producto.precio * cantidad
             )
-
-            print(newDetalle)
             
             # Redireccionamos a la vista del carrito o a donde sea necesario
             return redirect('home')  # Asegúrate de que 'home' sea el nombre correcto de tu vista
@@ -560,10 +562,43 @@ def agregar_al_carrito(request):
             print(f"Error en agregar_al_carrito: {str(e)}")
             return HttpResponse("Hubo un error al procesar la solicitud.", status=500)
 
-"""
-def detalle_del_carrito(request):
-    orden, created = models.ordenCompra.objects.get_or_create(usuario=request.user, completada=False)
-    items = orden.items.all()
-    total = sum(item.producto.precio * item.cantidad for item in items)
-    return render(request, 'carrito/detalle_carrito.html', {'orden': orden, 'items': items, 'total': total})
-"""
+@login_required(login_url='acceso_usuario')
+def facturar(request):
+    try:
+        # Obtenemos el nombre de usuario del usuario actual
+        username = request.user.username
+        
+        # Obtener la orden de compra para el usuario actual que aún no está completada
+        orden = models.OrdenCompra.objects.get(cliente__username=username, completada=False)
+        
+        # Obtener los detalles de la orden
+        detalles = models.DetalleOrden.objects.filter(orden=orden)
+
+        # Calcular el total de la factura
+        total = sum(item.producto.precio * item.cantidad for item in detalles)
+
+        # Generar la factura
+        try:
+            factura = models.Factura.objects.create(
+                orden=orden,
+                total=total
+            )
+            
+            # Marcar la orden como completada
+            orden.completada = True
+            orden.save()
+            
+            return redirect('home')
+        
+        except Exception as e:
+            # Imprimir el error para depuración
+            print(f"Error al crear la factura: {e}")
+            return HttpResponse('Bad Request 2')
+    
+    except models.OrdenCompra.DoesNotExist:
+        return HttpResponse('No Order Found')
+    
+    except Exception as e:
+        # Imprimir el error para depuración
+        print(f"Error al procesar la facturación: {e}")
+        return HttpResponse('Bad Request')
