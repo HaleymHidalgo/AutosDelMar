@@ -5,7 +5,7 @@
         <!-- Profile Datas -->
         <section>
             <div class="flex-column-center fondo-formulario">
-                <img src="#" alt="User-icon" class="img-user">
+                <img src="{% static 'assets/img/user-icon.png' %}" alt="User-icon" class="img-user">
                 <form class="form">
                     <fieldset disabled class="datos-usuario">
                         <div class="form-group">
@@ -18,35 +18,6 @@
                         </div>
                     </fieldset>
                 </form>
-            </div>
-            <div class="flex-column-center fondo-formulario">
-                <h2 class="titulo-seccion">Articulos Comprados</h2>
-                <table class="tabla-compras ">
-                    <thead>
-                        <tr>
-                            <th>Marca</th>
-                            <th>Modelo</th>
-                            <th>Precio</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>BMW</td>
-                            <td>M3 GTR</td>
-                            <td>$14.000.000 CLP</td>
-                        </tr>
-                        <tr>
-                            <td>Ford</td>
-                            <td>Mustang GT</td>
-                            <td>$25.000.000 CLP</td>
-                        </tr>
-                        <tr>
-                            <td>Porsch</td>
-                            <td>Carrera GT</td>
-                            <td>$65.000.000 CLP</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </section>
         {% endblock %}
