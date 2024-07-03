@@ -13,6 +13,7 @@ urlpatterns = [
     path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
     path('acceso_usuario/', views.acceso_usuario, name='acceso_usuario'),
     path('formularioContacto/', views.formularioContacto, name='formularioContacto'),
+    path('perfil/', views.perfil , name ='perfil' ),
     #------- Vendedor -----
     path('vendedor/home', views.v_home, name='v_home' ),
     path('vendedor/eliminarProducto/<int:id>',views.v_eliminarProducto, name = 'v_eliminarProducto' ),

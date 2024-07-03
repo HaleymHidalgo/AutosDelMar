@@ -126,6 +126,7 @@ def catalogo(request):
     else:
         return HttpResponse("idkmen")
     
+@csrf_exempt
 def registroUsuario(request):
     if(request.user.is_authenticated):
         return redirect('home')
@@ -243,6 +244,18 @@ def formularioContacto (request):
         
     else:
         return render(request, 'paginaProducto.html', {'form': forms.formularioContacto})
+
+def perfil(request):
+        if request.method == 'GET':
+            #Aqui nosotros obtenemos el usuario logeado
+            usuario = request.user
+            context = {
+                'usuario': usuario
+            }
+            #le vamos a pasarle el contexto a la plantilla
+            return render(request, 'perfil.html', context)
+        else:
+            return redirect('home')
 
 #------------------------- Vendedor -------------------------
 @login_required(login_url='acceso_usuario')
