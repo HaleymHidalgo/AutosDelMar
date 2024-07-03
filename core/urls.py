@@ -26,5 +26,6 @@ urlpatterns = [
     path('vendedor/registroAccesorio/', views.registroAccesorio, name='registroAccesorio'),
     #------- Orden de Venta -----
     path('agregar_al_carrito/', views.agregar_al_carrito, name='agregarCarrito'),
+    path('eliminar_de_carrito/', views.eliminar_de_carrito, name='elimar_de_carrito'),
     path('facturar/', views.facturar, name='facturar'),
 ]

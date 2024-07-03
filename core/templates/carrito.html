@@ -13,7 +13,11 @@
                 <p id="precioProducto"><b class="texto-azul">Precio:</b> {{item.precio}}</p>
                 <p id="cantidadProducto"><b class="texto-azul">Cantidad:</b> {{item.cantidad}}</p>
                 <p id="precioProducto"><b class="texto-azul">Subtotal:</b> {{item.subtotal}}</p>
-                <button class="btn btn-danger">Eliminar</button>
+                <form action="{% url 'elimar_de_carrito' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="idDetalle" value="{{item.idDetalle}}">
+                    <button class="btn btn-danger">Eliminar</button>
+                </form>
             </div>
         </article>
         {% endfor %}

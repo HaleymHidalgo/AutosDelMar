@@ -54,6 +54,7 @@ def carrito(request):
             for item in detalles:
                 accesorio = models.Accesorio.objects.get(producto_id=item.producto.producto_id)
                 accesorios.append({
+                    'idDetalle': item.pk,
                     'imagen': accesorio.producto_id.image,
                     'nombre': accesorio.nombre,
                     'precio': accesorio.producto_id.precio,
@@ -602,3 +603,18 @@ def facturar(request):
         # Imprimir el error para depuración
         print(f"Error al procesar la facturación: {e}")
         return HttpResponse('Bad Request')
+
+@login_required(login_url='acceso_usuario')
+def eliminar_de_carrito(request):
+    try:
+        # Obtenemos los datos para eliminar el detalle de la orden
+        idDetalle = request.POST.get('idDetalle')
+        # Obtenemos los datos del detalle
+        detalle = get_object_or_404(models.DetalleOrden, pk=idDetalle)
+        # Eliminar el detalle de la orden
+        detalle.delete()
+        # Redireccionamos a la vista del carrito o a donde sea necesario
+        return redirect('carrito')
+    except Exception as e:
+        print(f"Error en eliminar_de_carrito: {str(e)}")
+        return HttpResponse("Hubo un error al procesar la solicitud.", status=500)
