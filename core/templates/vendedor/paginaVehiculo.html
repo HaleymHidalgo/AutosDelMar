@@ -2,9 +2,9 @@
 {% block content %}
 {% load static %}
 
-<section>
-    <h1 class="titulo-seccion">Detalles del Vehículo</h1>
-    <form class="form fondo-formulario flex-column-center" method="POST" action="{% url 'v_modificarVehiculo' %}" enctype="multipart/form-data">
+<h1 class="titulo-seccion">Detalles del Vehículo</h1>
+<section class="fondo-formulario form flex-column-center">
+    <form class="form flex-column-center" method="POST" action="{% url 'v_modificarVehiculo' %}" enctype="multipart/form-data">
         {% csrf_token %}
         
         {% for field in formulario %}
@@ -24,10 +24,11 @@
         </div>
         <div class="flex-row-center" style="width: 80%;">
             <button id="editarbtn" class="btn btn-success boton">Guardar</button>
-            <button id="eliminarbtn" class="btn btn-danger boton" type="button">Eliminar</button>
         </div>
-    </form>    
+    </form>
+    <form action="{% url 'v_eliminarProducto' hiddenId %}" method="GET">
+        <button id="eliminarbtn" class="btn btn-danger boton" type="submit">Eliminar</button>
+    </form>
 </section>
 
-<script src="{% static 'assets/js/paginaProducto.js' %}"></script>
 {% endblock %}

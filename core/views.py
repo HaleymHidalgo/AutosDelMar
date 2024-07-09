@@ -401,11 +401,11 @@ def modificarProducto(request):
 
 @login_required(login_url='acceso_usuario')
 def v_eliminarProducto(request, id):
-    if request.method == 'DELETE':
+    if request.method == 'GET':
         try:
             producto = get_object_or_404(models.Producto, producto_id=id)
             producto.delete()
-            return JsonResponse({'message': 'Vehículo eliminado con éxito'}, status=204)
+            return redirect('v_home')
         except models.Producto.DoesNotExist:
             return JsonResponse({'message': 'El vehículo no existe'}, status=404)
         except Exception as e:

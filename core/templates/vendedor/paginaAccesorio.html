@@ -24,10 +24,12 @@
         </div>
         <div class="flex-row-center" style="width: 80%;">
             <button id="editarbtn" class="btn btn-success boton">Guardar</button>
-            <button id="eliminarbtn" class="btn btn-danger boton" type="button">Eliminar</button>
+            <form action="{% url 'v_eliminarProducto' hiddenId %}">
+                <input type="hidden" name="idProducto" value="{{hiddenId}}" id="hiddenId">
+                <button id="eliminarbtn" class="btn btn-danger boton" type="button">Eliminar</button>
+            </form>
         </div>
     </form>    
 </section>
 
-<script src="{% static 'assets/js/paginaProducto.js' %}"></script>
 {% endblock %}
