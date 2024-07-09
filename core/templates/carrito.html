@@ -9,10 +9,10 @@
         <article id="contenedor" class="fondo-seccion flex-row-center row">
             <img src="{{item.imagen}}" alt="img" class="imgCarrito col-xl-6 col-md-7">
             <div class="flex-column-center col-xl-6 col-md-5 texto-blanco" style="text-align: center;">
-                <p id="nombreProducto"><b class="texto-azul">Nombre:</b> {{item.nombre}}</p>
+                <p id="nombreProducto"><b class="texto-azul"></b> {{item.nombre}}</p>
                 <p id="precioProducto"><b class="texto-azul">Precio:</b> {{item.precio}}</p>
                 <p id="cantidadProducto"><b class="texto-azul">Cantidad:</b> {{item.cantidad}}</p>
-                <p id="precioProducto"><b class="texto-azul">Subtotal:</b> {{item.subtotal}}</p>
+                <p id="precioProducto"><b class="texto-azul">Subtotal:</b> ${{item.subtotal}}</p>
                 <form action="{% url 'elimar_de_carrito' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="idDetalle" value="{{item.idDetalle}}">
@@ -22,8 +22,8 @@
         </article>
         {% endfor %}
     </main>
-    <aside class=" col-xl-4 col-md-4">
-        <article class="precio-background flex-column-center texto-blanco">
+    <aside class="col-xl-4 col-md-4" style="max-height: 20rem;">
+        <article class="fondo-seccion flex-column-center texto-blanco">
             <h3>Total a Pagar</h2>
             <p id="precioTotal">${{total}}</p>
             <form action="{% url 'facturar' %}">
