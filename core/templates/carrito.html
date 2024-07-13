@@ -26,7 +26,7 @@
         <article class="fondo-seccion flex-column-center texto-blanco">
             <h3>Total a Pagar</h2>
             <p id="precioTotal">${{total}}</p>
-            <form action="{% url 'facturar' %}">
+            <form action="{% url 'pasarela_pago' %}">
                 <button id="btnComprar" class="btn btn-success boton">Comprar</button>
             </form>
         </article>

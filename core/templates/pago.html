@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<section>
+    <div class="flex-column-center fondo-formulario mt-5">
+        <img src="{% static '/assets/img/isotipo-autos-del-mar.png' %}" alt="">
+        <div class="container">
+            <form id="formAcceso" class="form" method="POST" action="{% url 'facturar' %}">
+                {% csrf_token %}
+                <h2 class="titulo-seccion">Pasarela de Pago</h2>
+                <div class="form-control">
+                    <h5 for="">Total a Pagar: ${{total}}</h5>
+                </div>
+                <div class="form-control">
+                    <label for="metodoPago">Metodo de Pago</label>
+                    <select name="metodoPago" id="metodoPago">
+                        <option value="Debito">Debito</option>
+                        <option value="Credito">Credito</option>
+                        <option value="Transferencia">Transferencia</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="numeroTarjeta"></label>
+                    <input type="number" id="numeroTarjeta" name="numeroTarjeta" placeholder="Número de Tarjeta">
+                </div>
+                <p id="errorAcceso" style="color: red;">{{ error }}</p>
+                <button>Realizar Pago</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

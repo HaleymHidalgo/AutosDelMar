@@ -582,6 +582,10 @@ def facturar(request):
         # Obtenemos el nombre de usuario del usuario actual
         username = request.user.username
         
+        tipo_pago = request.POST['metodoPago']
+        
+        num_tarjeta = request.POST['numeroTarjeta']
+        
         # Obtener la orden de compra para el usuario actual que aún no está completada
         orden = models.OrdenCompra.objects.get(cliente__username=username, completada=False)
         
@@ -593,9 +597,11 @@ def facturar(request):
 
         # Generar la factura
         try:
-            factura = models.Factura.objects.create(
+            models.Factura.objects.create(
                 orden=orden,
-                total=total
+                total=total,
+                tipo_pago=tipo_pago,
+                num_tarjeta=num_tarjeta
             )
             
             # Marcar la orden como completada
@@ -631,3 +637,25 @@ def eliminar_de_carrito(request):
     except Exception as e:
         print(f"Error en eliminar_de_carrito: {str(e)}")
         return HttpResponse("Hubo un error al procesar la solicitud.", status=500)
+    
+def pasarela_pago(request):
+    if request.method == 'GET':
+        try:
+            # Obtenemos el nombre de usuario del usuario actual
+            username = request.user.username
+            
+            # Obtener la orden de compra para el usuario actual que aún no está completada
+            orden = models.OrdenCompra.objects.get(cliente__username=username, completada=False)
+            
+            # Obtener los detalles de la orden
+            detalles = models.DetalleOrden.objects.filter(orden=orden)
+
+            # Calcular el total de la factura
+            total = sum(item.producto.precio * item.cantidad for item in detalles)
+        
+            return render(request, 'pago.html', {'total': total})
+        
+        except Exception as e:
+            # Imprimir el error para depuración
+            print(f"Error al crear la factura: {e}")
+            return HttpResponse('Bad Request 2')

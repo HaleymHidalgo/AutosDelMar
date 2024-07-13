@@ -67,5 +67,6 @@ class DetalleOrden(models.Model):
 class Factura(models.Model):
     orden = models.OneToOneField(OrdenCompra, on_delete=models.CASCADE)
     fecha_emision = models.DateTimeField(auto_now_add=True)
+    tipo_pago = models.CharField(max_length=50, default='Efectivo')
+    num_tarjeta = models.IntegerField(blank=True, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
-    # Otros campos como detalles de pago, etc.

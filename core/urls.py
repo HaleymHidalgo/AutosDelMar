@@ -29,4 +29,5 @@ urlpatterns = [
     path('agregar_al_carrito/', views.agregar_al_carrito, name='agregarCarrito'),
     path('eliminar_de_carrito/', views.eliminar_de_carrito, name='elimar_de_carrito'),
     path('facturar/', views.facturar, name='facturar'),
+    path('pasarela_pago/', views.pasarela_pago, name='pasarela_pago')
 ]
